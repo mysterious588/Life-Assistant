@@ -1,5 +1,6 @@
-package com.lifeassistance.Daos;
+package com.lifeassistance.Database;
 
+import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
@@ -20,5 +21,5 @@ public interface TaskDao {
     void deleteAll();
 
     @Query("SELECT * from tasks_table ORDER BY title ASC")
-    List<Task> getAlphabetizedtasks();
+    LiveData<List<Task>> getAlphabetizedTasks();
 }
