@@ -10,6 +10,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.khaledz.lifeassistance.R;
 import com.lifeassistance.Models.Task;
+import com.skydoves.progressview.OnProgressChangeListener;
+import com.skydoves.progressview.ProgressView;
 
 import java.util.List;
 
@@ -23,6 +25,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     public void setDataSet(List<Task> dataSet) {
         this.dataSet = dataSet;
+        notifyDataSetChanged();
     }
 
     @NonNull
@@ -40,9 +43,15 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
         TextView titleTextView = holder.titleTextView;
         TextView detailsTextView = holder.detailsTextView;
+        TextView typeTextView = holder.typeTextView;
+        ProgressView progressView = holder.progressView;
 
         titleTextView.setText(dataSet.get(listPosition).getTitle());
         detailsTextView.setText(dataSet.get(listPosition).getDetails());
+        progressView.setProgress(dataSet.get(listPosition).getProgress());
+
+        if (dataSet.get(listPosition).getType() == Task.TIMED) typeTextView.setText(R.string.Timed);
+        else typeTextView.setText(R.string.Progressive);
     }
 
     @Override
@@ -53,13 +62,15 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
-        TextView titleTextView;
-        TextView detailsTextView;
+        TextView titleTextView, detailsTextView, typeTextView;
+        ProgressView progressView;
 
         public ViewHolder(View itemView) {
             super(itemView);
-            this.titleTextView = (TextView) itemView.findViewById(R.id.titleTextView);
-            this.detailsTextView = (TextView) itemView.findViewById(R.id.detailsTextView);
+            this.titleTextView = itemView.findViewById(R.id.titleTextView);
+            this.detailsTextView = itemView.findViewById(R.id.detailsTextView);
+            this.typeTextView = itemView.findViewById(R.id.typeTextView);
+            this.progressView = itemView.findViewById(R.id.progressView);
         }
     }
 }

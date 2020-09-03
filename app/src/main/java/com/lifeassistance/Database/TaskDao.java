@@ -14,8 +14,8 @@ import java.util.List;
 public interface TaskDao {
     // allowing the insert of the same word multiple times by passing a
     // conflict resolution strategy
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
-    void insert(Task word);
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    void insert(Task task);
 
     @Query("DELETE FROM tasks_table")
     void deleteAll();

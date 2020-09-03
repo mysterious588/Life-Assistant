@@ -7,9 +7,10 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/tasksRecyclerView"
-        android:scrollbars="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent"
+        android:padding="16dp"
+        android:scrollbars="vertical" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

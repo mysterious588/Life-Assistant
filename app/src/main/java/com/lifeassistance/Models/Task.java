@@ -14,7 +14,7 @@ public class Task {
     public static final int TIMED = 0;
     public static final int PROGRESSIVE = 1;
 
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
     private int _id;
 
     private String title, details;

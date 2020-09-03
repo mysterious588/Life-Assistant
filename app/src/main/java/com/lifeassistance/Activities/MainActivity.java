@@ -1,9 +1,13 @@
 package com.lifeassistance.Activities;
 
+import android.app.Dialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.Window;
+import android.view.WindowManager;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -14,12 +18,18 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.textfield.TextInputEditText;
 import com.khaledz.lifeassistance.R;
 import com.lifeassistance.Adapters.RecyclerViewAdapter;
 import com.lifeassistance.Models.Task;
+import com.lifeassistance.EditTextStep;
 import com.lifeassistance.ViewModels.TaskViewModel;
 
+import java.time.LocalDateTime;
 import java.util.List;
+
+import ernestoyaquello.com.verticalstepperform.VerticalStepperFormView;
+import ernestoyaquello.com.verticalstepperform.listener.StepperFormListener;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MAIN ACTIVITY";
@@ -28,6 +38,10 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -38,19 +52,17 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         mTaskViewModel = new ViewModelProvider(this).get(TaskViewModel.class);
-        mTaskViewModel.getAllTasks().observe(this, new Observer<List<Task>>() {
-            @Override
-            public void onChanged(@Nullable final List<Task> task) {
-                // Update the cached copy of the words in the adapter.
-                for (int i = 0; i < task.size(); i++)
-                    Log.d(TAG, "New task found" + task.get(i).getTitle());
-                adapter.setDataSet(task);
-                adapter.notifyDataSetChanged();
-            }
+        mTaskViewModel.getAllTasks().observe(this, task -> {
+            // Update the cached copy of the words in the adapter.
+            for (int i = 0; i < task.size(); i++)
+                Log.d(TAG, "New task found: " + task.get(i).getTitle());
+            adapter.setDataSet(task);
         });
 
         FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(view -> runAddDialog());
+        fab.setOnClickListener(view ->
+                startActivity(new Intent(this, StepActivity.class))
+                );
     }
 
     @Override
@@ -76,6 +88,37 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void runAddDialog() {
+     /*   final Dialog dialog = new Dialog(this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setCancelable(true);
+        dialog.setContentView(R.layout.add_task_dialog);
 
+        TextInputEditText titleEditText = dialog.findViewById(R.id.textField);
+        String title = titleEditText.getText().toString();
+
+        EditTextStep editTextStep = new EditTextStep("title");
+        VerticalStepperFormView verticalStepperForm = findViewById(R.id.stepper_form);
+        verticalStepperForm.setup(new StepperFormListener() {
+            @Override
+            public void onCompletedForm() {
+
+            }
+
+            @Override
+            public void onCancelledForm() {
+
+            }
+        }, editTextStep).init();
+
+
+        /*Button dialogButton = (Button) dialog.findViewById(R.id.btn_dialog);
+        dialogButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+        dialog.show();*/
     }
 }

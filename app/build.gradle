@@ -52,6 +52,9 @@ dependencies {
     androidTestImplementation "androidx.arch.core:core-testing:$rootProject.coreTestingVersion"
     debugImplementation 'com.amitshekhar.android:debug-db:1.0.6'
 
+    // 3rd party libraries
     implementation 'com.github.shinelw:library:1.0.1'
+    implementation 'com.ernestoyaquello.stepperform:vertical-stepper-form:2.3.0'
+    implementation "com.github.skydoves:progressview:1.0.9"
 
 }

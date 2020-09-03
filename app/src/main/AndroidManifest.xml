@@ -9,6 +9,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name="com.lifeassistance.Activities.StepActivity"></activity>
         <activity
             android:name="com.lifeassistance.Activities.MainActivity"
             android:label="@string/app_name"

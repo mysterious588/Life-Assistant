@@ -40,8 +40,8 @@ public abstract class TaskDatabase extends RoomDatabase {
     // TODO: add the onCreate and fix the onOpen
     private static RoomDatabase.Callback sRoomDatabaseCallback = new RoomDatabase.Callback() {
         @Override
-        public void onOpen(@NonNull SupportSQLiteDatabase db) {
-            super.onOpen(db);
+        public void onCreate(@NonNull SupportSQLiteDatabase db) {
+            super.onCreate(db);
 
             // If you want to keep data through app restarts,
             // comment out the following block
@@ -49,9 +49,7 @@ public abstract class TaskDatabase extends RoomDatabase {
                 // Populate the database in the background.
                 // If you want to start with more words, just add them.
                 TaskDao dao = INSTANCE.mTaskDao();
-                dao.deleteAll();
-
-                Task word = new Task("Hello", "test task", Task.TIMED, 0, 90, LocalDateTime.now());
+                Task word = new Task("This an example", "aguhga hagugah ggahugagn gagjioga agjjga", Task.TIMED, 60, 90, LocalDateTime.now());
                 dao.insert(word);
             });
         }
