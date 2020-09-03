@@ -7,9 +7,9 @@ import android.view.Window;
 import android.view.WindowManager;
 
 import com.khaledz.lifeassistance.R;
-import com.lifeassistance.EditTextStep;
+import com.lifeassistance.Steps.EditTextStep;
 import com.lifeassistance.Models.Task;
-import com.lifeassistance.TypeStep;
+import com.lifeassistance.Steps.TypeStep;
 import com.lifeassistance.ViewModels.TaskViewModel;
 
 import java.time.LocalDateTime;

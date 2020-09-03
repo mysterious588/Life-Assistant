@@ -1,4 +1,4 @@
-package com.lifeassistance;
+package com.lifeassistance.Steps;
 
 import android.view.View;
 import android.widget.LinearLayout;

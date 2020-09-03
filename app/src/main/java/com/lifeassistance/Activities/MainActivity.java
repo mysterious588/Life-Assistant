@@ -1,6 +1,5 @@
 package com.lifeassistance.Activities;
 
-import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -9,27 +8,16 @@ import android.view.MenuItem;
 import android.view.Window;
 import android.view.WindowManager;
 
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.textfield.TextInputEditText;
 import com.khaledz.lifeassistance.R;
 import com.lifeassistance.Adapters.RecyclerViewAdapter;
-import com.lifeassistance.Models.Task;
-import com.lifeassistance.EditTextStep;
 import com.lifeassistance.ViewModels.TaskViewModel;
-
-import java.time.LocalDateTime;
-import java.util.List;
-
-import ernestoyaquello.com.verticalstepperform.VerticalStepperFormView;
-import ernestoyaquello.com.verticalstepperform.listener.StepperFormListener;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MAIN ACTIVITY";

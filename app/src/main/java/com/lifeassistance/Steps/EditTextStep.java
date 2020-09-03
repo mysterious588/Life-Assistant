@@ -1,4 +1,4 @@
-package com.lifeassistance;
+package com.lifeassistance.Steps;
 
 import android.text.Editable;
 import android.text.TextWatcher;
