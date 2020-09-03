@@ -1,22 +1,29 @@
 package com.lifeassistance.Activities;
 
 import android.os.Bundle;
-
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
-import com.khaledz.lifeassistance.R;
-
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-
-import android.view.View;
-
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import java.util.Date;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.khaledz.lifeassistance.R;
+import com.lifeassistance.Adapters.RecyclerViewAdapter;
+import com.lifeassistance.Models.Task;
+import com.lifeassistance.ViewModels.TaskViewModel;
+
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
+    private static final String TAG = "MAIN ACTIVITY";
+    private TaskViewModel mTaskViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,14 +32,25 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        Date date = new Date();
-        FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+        RecyclerView recyclerView = findViewById(R.id.tasksRecyclerView);
+        final RecyclerViewAdapter adapter = new RecyclerViewAdapter();
+        recyclerView.setAdapter(adapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        mTaskViewModel = new ViewModelProvider(this).get(TaskViewModel.class);
+        mTaskViewModel.getAllTasks().observe(this, new Observer<List<Task>>() {
             @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG).setAction("Action", null).show();
+            public void onChanged(@Nullable final List<Task> task) {
+                // Update the cached copy of the words in the adapter.
+                for (int i = 0; i < task.size(); i++)
+                    Log.d(TAG, "New task found" + task.get(i).getTitle());
+                adapter.setDataSet(task);
+                adapter.notifyDataSetChanged();
             }
         });
+
+        FloatingActionButton fab = findViewById(R.id.fab);
+        fab.setOnClickListener(view -> runAddDialog());
     }
 
     @Override
@@ -55,5 +73,9 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void runAddDialog() {
+
     }
 }

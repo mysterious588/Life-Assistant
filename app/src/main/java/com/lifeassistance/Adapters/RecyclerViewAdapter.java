@@ -11,26 +11,18 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.khaledz.lifeassistance.R;
 import com.lifeassistance.Models.Task;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> {
 
-    private ArrayList<Task> dataSet;
+    private List<Task> dataSet;
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
-
-        TextView titleTextView;
-        TextView detailsTextView;
-
-        public ViewHolder(View itemView) {
-            super(itemView);
-            this.titleTextView = (TextView) itemView.findViewById(R.id.titleTextView);
-            this.detailsTextView = (TextView) itemView.findViewById(R.id.detailsTextView);
-        }
+    public List<Task> getDataSet() {
+        return dataSet;
     }
 
-    public RecyclerViewAdapter(ArrayList<Task> dataset) {
-        this.dataSet = dataset;
+    public void setDataSet(List<Task> dataSet) {
+        this.dataSet = dataSet;
     }
 
     @NonNull
@@ -55,6 +47,19 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     @Override
     public int getItemCount() {
-        return dataSet.size();
+        if (dataSet != null) return dataSet.size();
+        else return 0;
+    }
+
+    public static class ViewHolder extends RecyclerView.ViewHolder {
+
+        TextView titleTextView;
+        TextView detailsTextView;
+
+        public ViewHolder(View itemView) {
+            super(itemView);
+            this.titleTextView = (TextView) itemView.findViewById(R.id.titleTextView);
+            this.detailsTextView = (TextView) itemView.findViewById(R.id.detailsTextView);
+        }
     }
 }

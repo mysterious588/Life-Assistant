@@ -2,10 +2,13 @@ package com.lifeassistance.Models;
 
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
+import androidx.room.TypeConverters;
+
+import com.lifeassistance.Database.LocalDateTimeConverter;
 
 import java.time.LocalDateTime;
 
-
+@TypeConverters({LocalDateTimeConverter.class})
 @Entity(tableName = "tasks_table")
 public class Task {
     public static final int TIMED = 0;
@@ -19,7 +22,7 @@ public class Task {
     private int duration, type;
     private LocalDateTime date;
 
-    public LocalDateTime  getDate() {
+    public LocalDateTime getDate() {
         return date;
     }
 
@@ -78,5 +81,9 @@ public class Task {
         this.progress = progress;
         this.duration = duration;
         this.date = date;
+    }
+
+    public void set_id(int _id) {
+        this._id = _id;
     }
 }
