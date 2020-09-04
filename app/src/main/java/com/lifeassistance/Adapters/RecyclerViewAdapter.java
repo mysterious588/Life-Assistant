@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.khaledz.lifeassistance.R;
 import com.lifeassistance.Activities.MainActivity;
-import com.lifeassistance.Models.Task;
+import com.lifeassistance.Database.Task;
 import com.skydoves.progressview.ProgressView;
 
 import java.util.List;

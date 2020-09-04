@@ -1,10 +1,8 @@
-package com.lifeassistance.Models;
+package com.lifeassistance.Database;
 
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 import androidx.room.TypeConverters;
-
-import com.lifeassistance.Database.LocalDateTimeConverter;
 
 import java.time.LocalDateTime;
 
@@ -21,7 +19,7 @@ public class Task {
     private float progress;
     private int duration, type;
     private LocalDateTime date;
-    private boolean isPlaying, icCompleted;
+    private boolean isPlaying = false, icCompleted = false;
 
     public Task(String title, String details, int type, float progress, int duration, LocalDateTime date) {
         this.title = title;

@@ -20,7 +20,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.khaledz.lifeassistance.R;
 import com.lifeassistance.Adapters.RecyclerViewAdapter;
-import com.lifeassistance.Models.Task;
+import com.lifeassistance.Database.Task;
 import com.lifeassistance.ViewModels.TaskViewModel;
 import com.ohoussein.playpause.PlayPauseView;
 import com.shinelw.library.ColorArcProgressBar;

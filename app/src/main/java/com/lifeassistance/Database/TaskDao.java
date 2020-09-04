@@ -8,8 +8,6 @@ import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 import androidx.room.Update;
 
-import com.lifeassistance.Models.Task;
-
 import java.util.List;
 
 @Dao

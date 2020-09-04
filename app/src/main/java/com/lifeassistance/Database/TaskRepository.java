@@ -4,8 +4,6 @@ import android.app.Application;
 
 import androidx.lifecycle.LiveData;
 
-import com.lifeassistance.Models.Task;
-
 import java.util.List;
 
 public class TaskRepository {
