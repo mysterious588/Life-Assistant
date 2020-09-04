@@ -29,6 +29,8 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MAIN ACTIVITY";
     private TaskViewModel mTaskViewModel;
 
+    FloatingActionButton fab;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,8 +55,11 @@ public class MainActivity extends AppCompatActivity {
             adapter.setDataSet(task);
         });
 
-        FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(view -> startActivity(new Intent(this, StepActivity.class)));
+        fab = findViewById(R.id.fab);
+        fab.setOnClickListener(view -> {
+            fab.setEnabled(false); // avoid multiple clicks
+            startActivity(new Intent(this, StepActivity.class));
+        });
     }
 
     @Override
@@ -105,5 +110,11 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        fab.setEnabled(true);
     }
 }
