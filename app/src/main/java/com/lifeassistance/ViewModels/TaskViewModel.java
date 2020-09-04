@@ -22,7 +22,19 @@ public class TaskViewModel extends AndroidViewModel {
         mAllTasks = mRepository.getAllTasks();
     }
 
-    public LiveData<List<Task>> getAllTasks() { return mAllTasks; }
+    public LiveData<List<Task>> getAllTasks() {
+        return mAllTasks;
+    }
 
-    public void insert(Task task) { mRepository.insert(task); }
+    public void insert(Task task) {
+        mRepository.insert(task);
+    }
+
+    public LiveData<Task> getTask(int id) {
+        return mRepository.getTask(id);
+    }
+
+    public void updateTask(Task task){
+        mRepository.updateTask(task);
+}
 }

@@ -5,6 +5,7 @@ import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
+import androidx.room.Update;
 
 import com.lifeassistance.Models.Task;
 
@@ -20,6 +21,13 @@ public interface TaskDao {
     @Query("DELETE FROM tasks_table")
     void deleteAll();
 
-    @Query("SELECT * from tasks_table ORDER BY title ASC")
+    @Query("SELECT * FROM tasks_table")
     LiveData<List<Task>> getAlphabetizedTasks();
+
+    @Query("SELECT * FROM tasks_table WHERE _id == :id")
+    LiveData<Task> getTask(int id);
+
+    @Update
+    void updateTask(Task task);
+
 }

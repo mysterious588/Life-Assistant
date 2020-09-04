@@ -37,4 +37,14 @@ public class TaskRepository {
         });
     }
 
+    public LiveData<Task> getTask(int id) {
+        return mTaskDao.getTask(id);
+    }
+
+    public void updateTask(Task task) {
+        TaskDatabase.databaseWriteExecutor.execute(() -> {
+            mTaskDao.updateTask(task);
+        });
+    }
+
 }
