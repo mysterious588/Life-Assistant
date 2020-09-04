@@ -25,12 +25,14 @@
             android:orientation="vertical">
 
             <TextView
+
                 android:id="@+id/titleTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="10dp"
                 android:text="Task Title"
+                android:textAlignment="center"
                 android:textAppearance="?android:attr/textAppearanceLarge" />
 
             <LinearLayout
@@ -58,10 +60,12 @@
                     android:layout_weight="1"
                     android:gravity="center"
                     android:text="Timed"
-                    android:textAppearance="?android:attr/textAppearanceMedium" />
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textStyle="bold" />
             </LinearLayout>
 
             <TextView
+                android:visibility="gone"
                 android:id="@+id/detailsTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -73,11 +77,10 @@
             <com.skydoves.progressview.ProgressView
                 android:id="@+id/progressView"
                 android:layout_width="match_parent"
-                android:layout_height="35dp"
+                android:layout_height="25dp"
                 android:layout_margin="8dp"
                 app:progressView_autoAnimate="true"
                 app:progressView_colorBackground="@color/colorWhite"
-                app:progressView_max="100"
                 app:progressView_min="0"
                 app:progressView_padding="1dp"
                 app:progressView_progress="40"

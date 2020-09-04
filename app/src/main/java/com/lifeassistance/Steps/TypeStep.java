@@ -68,6 +68,7 @@ public class TypeStep extends Step<String> {
     @Override
     protected void onStepMarkedAsCompleted(boolean animated) {
         // This will be called automatically whenever the step is marked as completed.
+
     }
 
     @Override

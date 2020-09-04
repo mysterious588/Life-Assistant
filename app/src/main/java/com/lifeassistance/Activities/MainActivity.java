@@ -2,6 +2,7 @@ package com.lifeassistance.Activities;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -11,6 +12,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.ViewModelProvider;
@@ -37,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
     private FloatingActionButton fab;
 
     public static void viewTaskDialog(Context context, Task task, View v) {
+        selectedTask = task.get_id();
         Log.d(TAG, "showing dialog");
         final Dialog dialog = new Dialog(context);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -60,7 +63,6 @@ public class MainActivity extends AppCompatActivity {
                         Log.d(TAG, "task started");
                         task.setProgress(task.getProgress() + 1);
                         task.setPlaying(true);
-                        selectedTask = task.get_id();
                         mTaskViewModel.updateTask(task);
                     } else {
                         task.setPlaying(false);
@@ -133,5 +135,27 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         fab.setEnabled(true);
+    }
+
+    public static void deleteTask(Context context, Task task) {
+
+        DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                switch (which) {
+                    case DialogInterface.BUTTON_POSITIVE:
+                        //Yes button clicked
+                        mTaskViewModel.deleteTask(task);
+                        break;
+
+                    case DialogInterface.BUTTON_NEGATIVE:
+                        //No button clicked
+                        break;
+                }
+            }
+        };
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setMessage("Are you sure you want to remove this?").setPositiveButton("Yes", dialogClickListener).setNegativeButton("No", dialogClickListener).show();
     }
 }

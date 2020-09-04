@@ -79,6 +79,17 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                     }
                 }
             });
+            itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View view) {
+                    int pos = getAdapterPosition();
+                    if (pos != RecyclerView.NO_POSITION) {
+                        Task task = dataSet.get(pos);
+                        MainActivity.deleteTask(view.getContext(), task);
+                    }
+                    return true;
+                }
+            });
 
         }
     }

@@ -21,7 +21,7 @@ public class StepActivity extends Activity implements StepperFormListener {
 
     private static final String TAG = "STEP ACTIVITY";
 
-    private EditTextStep titleEditText, detailsEditText;
+    private EditTextStep titleEditText;
     private TypeStep typeStep;
 
     private VerticalStepperFormView verticalStepperForm;
@@ -37,13 +37,11 @@ public class StepActivity extends Activity implements StepperFormListener {
 
         // Create the steps.
         titleEditText = new EditTextStep("Task Title", "title");
-        detailsEditText = new EditTextStep("Details", "details");
         typeStep = new TypeStep("Type");
 
         // Find the form view, set it up and initialize it.
         verticalStepperForm = findViewById(R.id.stepper_forms);
-        verticalStepperForm
-                .setup(this, titleEditText, detailsEditText, typeStep).allowNonLinearNavigation(true).closeLastStepOnCompletion(true)
+        verticalStepperForm.setup(this, titleEditText, typeStep).allowNonLinearNavigation(true).closeLastStepOnCompletion(true)
                 .init();
     }
 
@@ -53,12 +51,11 @@ public class StepActivity extends Activity implements StepperFormListener {
         // form in an attempt to save or send the data.
         String typeString = typeStep.getStepData();
         int type = typeString.equals("Timed") ? Task.TIMED : Task.PROGRESSIVE;
-        Task task = new Task(titleEditText.getStepData(), detailsEditText.getStepData(), type,0,60, LocalDateTime.now());
+        Task task = new Task(titleEditText.getStepData(), type, 0, 60, LocalDateTime.now());
 
         Log.d(TAG, "id: " + task.get_id());
         Log.d(TAG, "type: " + task.getType());
         Log.d(TAG, "title: " + task.getTitle());
-        Log.d(TAG, "details: " + task.getDetails());
         Log.d(TAG, "date: " + task.getDate().toString());
 
         TaskViewModel taskViewModel = new TaskViewModel(getApplication());

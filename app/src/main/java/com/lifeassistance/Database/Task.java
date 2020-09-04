@@ -21,7 +21,7 @@ public class Task {
     private LocalDateTime date;
     private boolean isPlaying = false, icCompleted = false;
 
-    public Task(String title, String details, int type, float progress, int duration, LocalDateTime date) {
+    public Task(String title, int type, float progress, int duration, LocalDateTime date) {
         this.title = title;
         this.details = details;
         this.type = type;

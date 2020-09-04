@@ -45,7 +45,8 @@ public class TaskRepository {
         });
     }
     public void deleteTask(Task task){
-        mTaskDao.deleteTask(task);
-
+        TaskDatabase.databaseWriteExecutor.execute(() -> {
+            mTaskDao.deleteTask(task);
+        });
     }
 }
