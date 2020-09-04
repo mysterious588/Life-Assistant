@@ -26,40 +26,49 @@ import com.ohoussein.playpause.PlayPauseView;
 import com.shinelw.library.ColorArcProgressBar;
 
 public class MainActivity extends AppCompatActivity {
+
+    private static int selectedTask = -1;
+
     private static final String TAG = "MAIN ACTIVITY";
-    private TaskViewModel mTaskViewModel;
 
-    FloatingActionButton fab;
+    private static TaskViewModel mTaskViewModel;
+    private static ColorArcProgressBar colorArcProgressBar;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    private FloatingActionButton fab;
 
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
-        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+    public static void viewTaskDialog(Context context, Task task, View v) {
+        Log.d(TAG, "showing dialog");
+        final Dialog dialog = new Dialog(context);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setCancelable(true);
+        dialog.setContentView(R.layout.view_task_dialog);
+        colorArcProgressBar = dialog.findViewById(R.id.circularProgressBar);
+        Log.d(TAG + " progress", Float.toString(task.getProgress()));
+        colorArcProgressBar.setMaxValues(task.getDuration());
+        colorArcProgressBar.setCurrentValues(task.getProgress());
+        dialog.show();
 
-        setContentView(R.layout.activity_main);
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
-        RecyclerView recyclerView = findViewById(R.id.tasksRecyclerView);
-        final RecyclerViewAdapter adapter = new RecyclerViewAdapter();
-        recyclerView.setAdapter(adapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-
-        mTaskViewModel = new ViewModelProvider(this).get(TaskViewModel.class);
-        mTaskViewModel.getAllTasks().observe(this, task -> {
-            // Update the cached copy of the words in the adapter.
-            for (int i = 0; i < task.size(); i++)
-                Log.d(TAG, "New task found: " + task.get(i).getTitle());
-            adapter.setDataSet(task);
-        });
-
-        fab = findViewById(R.id.fab);
-        fab.setOnClickListener(view -> {
-            fab.setEnabled(false); // avoid multiple clicks
-            startActivity(new Intent(this, StepActivity.class));
-        });
+        if (task.getType() == Task.TIMED) {
+            PlayPauseView playPauseView = dialog.findViewById(R.id.play_pause_view);
+            if (task.isPlaying()) playPauseView.change(false, false);
+            playPauseView.setVisibility(View.VISIBLE);
+            playPauseView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    playPauseView.toggle();
+                    if (!playPauseView.isPlay()) {
+                        Log.d(TAG, "task started");
+                        task.setProgress(task.getProgress() + 1);
+                        task.setPlaying(true);
+                        selectedTask = task.get_id();
+                        mTaskViewModel.updateTask(task);
+                    } else {
+                        task.setPlaying(false);
+                        mTaskViewModel.updateTask(task);
+                    }
+                }
+            });
+        }
     }
 
     @Override
@@ -84,32 +93,40 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public static void viewTaskDialog(Context context, Task task, View v) {
-        Log.d(TAG, "showing dialog");
-        final Dialog dialog = new Dialog(context);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setCancelable(true);
-        dialog.setContentView(R.layout.view_task_dialog);
-        ColorArcProgressBar colorArcProgressBar = dialog.findViewById(R.id.circularProgressBar);
-        Log.d(TAG, Float.toString(task.getProgress()));
-        colorArcProgressBar.setCurrentValues(task.getProgress());
-        colorArcProgressBar.setMaxValues(task.getDuration());
-        dialog.show();
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
 
-        if (task.getType() == Task.TIMED) {
-            PlayPauseView playPauseView = dialog.findViewById(R.id.play_pause_view);
-            playPauseView.setVisibility(View.VISIBLE);
-            playPauseView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    playPauseView.toggle();
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
-                    if (!playPauseView.isPlay()) {
-                        Log.d(TAG, "task started");
-                    }
+        setContentView(R.layout.activity_main);
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        RecyclerView recyclerView = findViewById(R.id.tasksRecyclerView);
+        final RecyclerViewAdapter adapter = new RecyclerViewAdapter();
+        recyclerView.setAdapter(adapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        mTaskViewModel = new ViewModelProvider(this).get(TaskViewModel.class);
+        mTaskViewModel.getAllTasks().observe(this, task -> {
+            // Update the cached copy of the words in the adapter.
+            for (int i = 0; i < task.size(); i++) {
+                Log.d(TAG, "New task found: " + task.get(i).getTitle());
+                if (colorArcProgressBar != null && task.get(i).get_id() == selectedTask) {
+                    Log.d(TAG, "updating progress bard: " + task.get(i).getProgress());
+                    colorArcProgressBar.setCurrentValues(task.get(i).getProgress());
                 }
-            });
-        }
+                adapter.setDataSet(task);
+            }
+        });
+
+        fab = findViewById(R.id.fab);
+        fab.setOnClickListener(view -> {
+            fab.setEnabled(false); // avoid multiple clicks
+            startActivity(new Intent(this, StepActivity.class));
+        });
     }
 
     @Override

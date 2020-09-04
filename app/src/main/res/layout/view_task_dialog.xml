@@ -16,7 +16,6 @@
         app:front_width="10dp"
         app:is_need_content="true"
         app:is_need_unit="true"
-        app:max_value="100"
         app:string_unit="progress"
         app:total_engle="360" />
 
