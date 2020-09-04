@@ -2,6 +2,7 @@ package com.lifeassistance.Database;
 
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
+import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
@@ -30,4 +31,6 @@ public interface TaskDao {
     @Update
     void updateTask(Task task);
 
+    @Delete
+    void deleteTask(Task task);
 }

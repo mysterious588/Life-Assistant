@@ -46,5 +46,8 @@ public class TaskRepository {
             mTaskDao.updateTask(task);
         });
     }
+    public void deleteTask(Task task){
+        mTaskDao.deleteTask(task);
 
+    }
 }
