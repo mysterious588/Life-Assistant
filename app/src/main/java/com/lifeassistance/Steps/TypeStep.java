@@ -27,22 +27,24 @@ public class TypeStep extends Step<String> {
         progressiveRadioButton.setText("progressive");
         mRadioGroup.addView(timedRadioButton);
         mRadioGroup.addView(progressiveRadioButton);
-
         mRadioGroup.setOrientation(LinearLayout.HORIZONTAL);
+
+        mRadioGroup.setOnCheckedChangeListener((radioGroup, i) -> markAsCompletedOrUncompleted(true));
+
         return mRadioGroup;
     }
 
     @Override
     protected IsDataValid isStepDataValid(String stepData) {
-        return new IsDataValid(true);
+        return new IsDataValid(timedRadioButton.isChecked() || progressiveRadioButton.isChecked(), "You must select a type");
     }
 
     @Override
     public String getStepData() {
         // We get the step's data from the value that the user has typed in the EditText view.
-        if (timedRadioButton.isSelected()) {
+        if (timedRadioButton.isChecked()) {
             return "Timed";
-        } else if (progressiveRadioButton.isSelected()) return "Progressive";
+        } else if (progressiveRadioButton.isChecked()) return "Progressive";
         else {
             return "Empty";
         }
@@ -50,12 +52,7 @@ public class TypeStep extends Step<String> {
 
     @Override
     public String getStepDataAsHumanReadableString() {
-        if (timedRadioButton.isSelected()) {
-            return "Timed";
-        } else if (progressiveRadioButton.isSelected()) return "Progressive";
-        else {
-            return "Empty";
-        }
+        return getStepData();
     }
 
     @Override
