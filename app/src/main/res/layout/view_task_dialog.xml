@@ -2,15 +2,14 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:orientation="vertical">
 
     <com.shinelw.library.ColorArcProgressBar
         android:id="@+id/circularProgressBar"
-        android:layout_width="300dp"
-        android:layout_height="300dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:layout_marginBottom="150dp"
         app:back_color="@android:color/darker_gray"
         app:back_width="10dp"
         app:front_color1="@color/colorAccent"
@@ -20,4 +19,35 @@
         app:max_value="100"
         app:string_unit="progress"
         app:total_engle="360" />
+
+    <com.ohoussein.playpause.PlayPauseView
+        android:visibility="gone"
+        android:id="@+id/play_pause_view"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_gravity="center"
+        android:layout_margin="16dp"
+        android:clickable="true"
+        android:foreground="?android:selectableItemBackground"
+        app:pause_bg="@color/colorPrimary"
+        app:play_bg="@color/colorPrimary" />
+    <!--
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:orientation="horizontal">
+
+            <com.google.android.material.button.MaterialButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:text="dismiss" />
+
+            <com.google.android.material.button.MaterialButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:text="finish" />
+        </LinearLayout>-->
 </LinearLayout>

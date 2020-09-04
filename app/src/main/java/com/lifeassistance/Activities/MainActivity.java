@@ -22,6 +22,7 @@ import com.khaledz.lifeassistance.R;
 import com.lifeassistance.Adapters.RecyclerViewAdapter;
 import com.lifeassistance.Models.Task;
 import com.lifeassistance.ViewModels.TaskViewModel;
+import com.ohoussein.playpause.PlayPauseView;
 import com.shinelw.library.ColorArcProgressBar;
 
 public class MainActivity extends AppCompatActivity {
@@ -87,6 +88,22 @@ public class MainActivity extends AppCompatActivity {
         ColorArcProgressBar colorArcProgressBar = dialog.findViewById(R.id.circularProgressBar);
         Log.d(TAG, Float.toString(task.getProgress()));
         colorArcProgressBar.setCurrentValues(task.getProgress());
+        colorArcProgressBar.setMaxValues(task.getDuration());
         dialog.show();
+
+        if (task.getType() == Task.TIMED) {
+            PlayPauseView playPauseView = dialog.findViewById(R.id.play_pause_view);
+            playPauseView.setVisibility(View.VISIBLE);
+            playPauseView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    playPauseView.toggle();
+
+                    if (!playPauseView.isPlay()) {
+                        Log.d(TAG, "task started");
+                    }
+                }
+            });
+        }
     }
 }
