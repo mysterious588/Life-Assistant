@@ -9,22 +9,22 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.khaledz.lifeassistance.R;
+import com.lifeassistance.Activities.MainActivity;
 import com.lifeassistance.Models.Task;
-import com.skydoves.progressview.OnProgressChangeListener;
 import com.skydoves.progressview.ProgressView;
 
 import java.util.List;
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> {
 
-    private List<Task> dataSet;
+    private static List<Task> dataSet;
 
     public List<Task> getDataSet() {
         return dataSet;
     }
 
     public void setDataSet(List<Task> dataSet) {
-        this.dataSet = dataSet;
+        RecyclerViewAdapter.dataSet = dataSet;
         notifyDataSetChanged();
     }
 
@@ -32,9 +32,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.card, parent, false);
-        //TODO: add the on click listener
-        //view.setOnClickListener(MainActivity.myOnClickListener);
-
         return new ViewHolder(view);
     }
 
@@ -71,6 +68,18 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             this.detailsTextView = itemView.findViewById(R.id.detailsTextView);
             this.typeTextView = itemView.findViewById(R.id.typeTextView);
             this.progressView = itemView.findViewById(R.id.progressView);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    int pos = getAdapterPosition();
+                    if (pos != RecyclerView.NO_POSITION) {
+                        Task task = dataSet.get(pos);
+                        MainActivity.viewTaskDialog(view.getContext(), task, view);
+                    }
+                }
+            });
+
         }
     }
 }

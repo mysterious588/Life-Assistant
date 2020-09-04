@@ -1,10 +1,13 @@
 package com.lifeassistance.Activities;
 
+import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 
@@ -17,7 +20,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.khaledz.lifeassistance.R;
 import com.lifeassistance.Adapters.RecyclerViewAdapter;
+import com.lifeassistance.Models.Task;
 import com.lifeassistance.ViewModels.TaskViewModel;
+import com.shinelw.library.ColorArcProgressBar;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MAIN ACTIVITY";
@@ -28,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -48,9 +53,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(view ->
-                startActivity(new Intent(this, StepActivity.class))
-                );
+        fab.setOnClickListener(view -> startActivity(new Intent(this, StepActivity.class)));
     }
 
     @Override
@@ -75,38 +78,15 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void runAddDialog() {
-     /*   final Dialog dialog = new Dialog(this);
+    public static void viewTaskDialog(Context context, Task task, View v) {
+        Log.d(TAG, "showing dialog");
+        final Dialog dialog = new Dialog(context);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setCancelable(true);
-        dialog.setContentView(R.layout.add_task_dialog);
-
-        TextInputEditText titleEditText = dialog.findViewById(R.id.textField);
-        String title = titleEditText.getText().toString();
-
-        EditTextStep editTextStep = new EditTextStep("title");
-        VerticalStepperFormView verticalStepperForm = findViewById(R.id.stepper_form);
-        verticalStepperForm.setup(new StepperFormListener() {
-            @Override
-            public void onCompletedForm() {
-
-            }
-
-            @Override
-            public void onCancelledForm() {
-
-            }
-        }, editTextStep).init();
-
-
-        /*Button dialogButton = (Button) dialog.findViewById(R.id.btn_dialog);
-        dialogButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-            }
-        });
-
-        dialog.show();*/
+        dialog.setContentView(R.layout.view_task_dialog);
+        ColorArcProgressBar colorArcProgressBar = dialog.findViewById(R.id.circularProgressBar);
+        Log.d(TAG, Float.toString(task.getProgress()));
+        colorArcProgressBar.setCurrentValues(task.getProgress());
+        dialog.show();
     }
 }
