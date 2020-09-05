@@ -3,6 +3,7 @@
     package="com.khaledz.lifeassistance">
 
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -10,10 +11,15 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <receiver
+            android:name="com.lifeassistance.Activities.CallTaskProgressService"
+            android:enabled="true"
+            android:exported="true"></receiver>
+
         <service
             android:name="com.lifeassistance.Activities.TaskProgressService"
             android:enabled="true"
-            android:exported="true"></service>
+            android:exported="true" />
 
         <activity android:name="com.lifeassistance.Activities.StepActivity" />
         <activity

@@ -52,7 +52,7 @@ public class TaskProgressService extends LifecycleService {
             return;
         }
         timer = new Timer();
-        timer.scheduleAtFixedRate(timerTask, 0, 1000);
+        timer.scheduleAtFixedRate(timerTask, 0, 60 * 1000);
     }
 
     public void stop() {
@@ -83,5 +83,12 @@ public class TaskProgressService extends LifecycleService {
             mTaskRepository = new TaskRepository(getApplication());
             start();
         }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Intent restartService = new Intent("CallTaskProgressService");
+        sendBroadcast(restartService);
     }
 }
