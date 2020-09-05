@@ -36,19 +36,22 @@ public class StepActivity extends Activity implements StepperFormListener {
         super.onCreate(savedInstanceState);
 
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         setContentView(R.layout.activity_step);
 
         // Create the steps.
         titleEditText = new EditTextStep("Task Title", "title");
-        typeStep = new TypeStep("Type");
         timePIckStep = new TimePIckStep("Duration (minutes)");
 
         // Find the form view, set it up and initialize it.
         verticalStepperForm = findViewById(R.id.stepper_forms);
-        verticalStepperForm.setup(this, titleEditText, typeStep, timePIckStep).allowNonLinearNavigation(true).closeLastStepOnCompletion(true)
-                .init();
+        typeStep = new TypeStep("Type", verticalStepperForm);
+        verticalStepperForm.setup(this, titleEditText, typeStep).
+                allowNonLinearNavigation(true).
+                closeLastStepOnCompletion(true).
+                init();
+
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -58,7 +61,8 @@ public class StepActivity extends Activity implements StepperFormListener {
         // form in an attempt to save or send the data.
         String typeString = typeStep.getStepData();
         int type = typeString.equals("Timed") ? Task.TIMED : Task.PROGRESSIVE;
-        Task task = new Task(titleEditText.getStepData(), type, 0, timePIckStep.getStepData(), LocalDateTime.now());
+        Log.d(TAG, "duration " + TypeStep.getDuration());
+        Task task = new Task(titleEditText.getStepData(), type, 0, TypeStep.getDuration(), LocalDateTime.now());
 
         Log.d(TAG, "id: " + task.get_id());
         Log.d(TAG, "type: " + task.getType());

@@ -6,14 +6,33 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
 import ernestoyaquello.com.verticalstepperform.Step;
+import ernestoyaquello.com.verticalstepperform.VerticalStepperFormView;
 
 public class TypeStep extends Step<String> {
 
+    private static final int TIMED = 0;
+    private static final int PROGRESSIVE = 1;
+    private static final int DEFINED = 2;
+    private static final int UNDEFINED = -1;
+
     private RadioGroup mRadioGroup;
     private RadioButton timedRadioButton, progressiveRadioButton;
+    private static int duration;
+    private VerticalStepperFormView verticalStepperFormView;
+    private TimePIckStep timePIckStep;
+    private int chosenState = UNDEFINED;
 
-    public TypeStep(String stepTitle) {
+    public TypeStep(String stepTitle, VerticalStepperFormView verticalStepperFormView) {
         super(stepTitle);
+        this.verticalStepperFormView = verticalStepperFormView;
+    }
+
+    public static int getDuration() {
+        return duration;
+    }
+
+    public static void setDuration(int duration) {
+        TypeStep.duration = duration;
     }
 
     @Override
@@ -68,6 +87,27 @@ public class TypeStep extends Step<String> {
     @Override
     protected void onStepClosed(boolean animated) {
         // This will be called automatically whenever the step gets closed.
+        if (getStepData().equals("Timed") && chosenState != TIMED) {
+            // timed is picked
+            timePIckStep = new TimePIckStep("Duraion (minutes)");
+            if (chosenState == PROGRESSIVE) {
+                verticalStepperFormView.removeStep(2);
+            }
+            verticalStepperFormView.addStep(2, timePIckStep);
+            chosenState = TIMED;
+
+        } else if (getStepData().equals("Progressive")) {
+            // progressive is picked
+            if (chosenState == TIMED) verticalStepperFormView.removeStep(2);
+            chosenState = PROGRESSIVE;
+            // TODO add progressive logic
+        } else {
+            // nothing is picked
+            if (chosenState != UNDEFINED & chosenState != TIMED) {
+                verticalStepperFormView.removeStep(2);
+                chosenState = DEFINED;
+            }
+        }
     }
 
     @Override

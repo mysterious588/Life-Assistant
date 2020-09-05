@@ -18,7 +18,7 @@ public class TimePIckStep extends Step<Integer> {
     protected View createStepContentLayout() {
         // Here we generate the view that will be used by the library as the content of the step.
         // In this case we do it programmatically, but we could also do it by inflating an XML layout.
-        timePicker = new NumberPicker(getContext());
+        if (timePicker == null) timePicker = new NumberPicker(getContext());
         timePicker.setMinValue(0);
         timePicker.setMaxValue(24 * 60);
 
@@ -37,7 +37,7 @@ public class TimePIckStep extends Step<Integer> {
         // three characters. In case it is not, we will display an error message for feedback.
         // In an optional step, you should implement this method to always return a valid value.
 
-        return new IsDataValid(true);
+        return new IsDataValid(stepData > 0);
     }
 
     @Override
@@ -58,6 +58,7 @@ public class TimePIckStep extends Step<Integer> {
     @Override
     protected void onStepClosed(boolean animated) {
         // This will be called automatically whenever the step gets closed.
+        TypeStep.setDuration(getStepData());
     }
 
     @Override
