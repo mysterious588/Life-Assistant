@@ -1,14 +1,18 @@
 package com.lifeassistance.Activities;
 
 import android.app.Activity;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Window;
 import android.view.WindowManager;
 
+import androidx.annotation.RequiresApi;
+
 import com.khaledz.lifeassistance.R;
 import com.lifeassistance.Database.Task;
 import com.lifeassistance.Steps.EditTextStep;
+import com.lifeassistance.Steps.TimePIckStep;
 import com.lifeassistance.Steps.TypeStep;
 import com.lifeassistance.ViewModels.TaskViewModel;
 
@@ -23,6 +27,7 @@ public class StepActivity extends Activity implements StepperFormListener {
 
     private EditTextStep titleEditText;
     private TypeStep typeStep;
+    private TimePIckStep timePIckStep;
 
     private VerticalStepperFormView verticalStepperForm;
 
@@ -38,20 +43,22 @@ public class StepActivity extends Activity implements StepperFormListener {
         // Create the steps.
         titleEditText = new EditTextStep("Task Title", "title");
         typeStep = new TypeStep("Type");
+        timePIckStep = new TimePIckStep("Duration (minutes)");
 
         // Find the form view, set it up and initialize it.
         verticalStepperForm = findViewById(R.id.stepper_forms);
-        verticalStepperForm.setup(this, titleEditText, typeStep).allowNonLinearNavigation(true).closeLastStepOnCompletion(true)
+        verticalStepperForm.setup(this, titleEditText, typeStep, timePIckStep).allowNonLinearNavigation(true).closeLastStepOnCompletion(true)
                 .init();
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public void onCompletedForm() {
         // This method will be called when the user clicks on the last confirmation button of the
         // form in an attempt to save or send the data.
         String typeString = typeStep.getStepData();
         int type = typeString.equals("Timed") ? Task.TIMED : Task.PROGRESSIVE;
-        Task task = new Task(titleEditText.getStepData(), type, 0, 60, LocalDateTime.now());
+        Task task = new Task(titleEditText.getStepData(), type, 0, timePIckStep.getStepData(), LocalDateTime.now());
 
         Log.d(TAG, "id: " + task.get_id());
         Log.d(TAG, "type: " + task.getType());

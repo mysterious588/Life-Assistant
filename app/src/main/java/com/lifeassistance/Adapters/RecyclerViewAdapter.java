@@ -45,6 +45,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
         titleTextView.setText(dataSet.get(listPosition).getTitle());
         detailsTextView.setText(dataSet.get(listPosition).getDetails());
+        progressView.setMax(dataSet.get(listPosition).getDuration());
         progressView.setProgress(dataSet.get(listPosition).getProgress());
 
         if (dataSet.get(listPosition).getType() == Task.TIMED) typeTextView.setText(R.string.Timed);

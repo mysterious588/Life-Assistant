@@ -29,7 +29,12 @@ public class TypeStep extends Step<String> {
         mRadioGroup.addView(progressiveRadioButton);
         mRadioGroup.setOrientation(LinearLayout.HORIZONTAL);
 
-        mRadioGroup.setOnCheckedChangeListener((radioGroup, i) -> markAsCompletedOrUncompleted(true));
+        mRadioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup radioGroup, int i) {
+                markAsCompletedOrUncompleted(true);
+            }
+        });
 
         return mRadioGroup;
     }
@@ -68,7 +73,6 @@ public class TypeStep extends Step<String> {
     @Override
     protected void onStepMarkedAsCompleted(boolean animated) {
         // This will be called automatically whenever the step is marked as completed.
-
     }
 
     @Override
