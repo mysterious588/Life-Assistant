@@ -26,6 +26,10 @@ public class TaskViewModel extends AndroidViewModel {
         return mAllTasks;
     }
 
+    public List<Task> getAllTasksSynced() {
+        return mRepository.getAllTasksSynced();
+    }
+
     public void insert(Task task) {
         mRepository.insert(task);
     }
@@ -34,11 +38,19 @@ public class TaskViewModel extends AndroidViewModel {
         return mRepository.getTask(id);
     }
 
+    public Task getTaskSynced(int id) {
+        return mRepository.getTaskSynced(id);
+    }
+
     public void updateTask(Task task) {
         mRepository.updateTask(task);
     }
 
     public void deleteTask(Task task) {
         mRepository.deleteTask(task);
+    }
+
+    public void setTaskPlaying(int id, boolean state) {
+        mRepository.setTaskPlaying(id, state);
     }
 }

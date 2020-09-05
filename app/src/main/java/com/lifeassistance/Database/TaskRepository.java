@@ -39,14 +39,29 @@ public class TaskRepository {
         return mTaskDao.getTask(id);
     }
 
+    public List<Task> getAllTasksSynced() {
+        return mTaskDao.getAlphabetizedTasksSynced();
+    }
+
+    public Task getTaskSynced(int id) {
+        return mTaskDao.getTaskSynced(id);
+    }
+
     public void updateTask(Task task) {
         TaskDatabase.databaseWriteExecutor.execute(() -> {
             mTaskDao.updateTask(task);
         });
     }
-    public void deleteTask(Task task){
+
+    public void deleteTask(Task task) {
         TaskDatabase.databaseWriteExecutor.execute(() -> {
             mTaskDao.deleteTask(task);
+        });
+    }
+
+    public void setTaskPlaying(int id, boolean state) {
+        TaskDatabase.databaseWriteExecutor.execute(() -> {
+            mTaskDao.setTaskPlaying(id, state);
         });
     }
 }

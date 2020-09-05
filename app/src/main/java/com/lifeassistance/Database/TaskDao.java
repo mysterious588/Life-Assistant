@@ -23,8 +23,17 @@ public interface TaskDao {
     @Query("SELECT * FROM tasks_table")
     LiveData<List<Task>> getAlphabetizedTasks();
 
+    @Query("SELECT * FROM tasks_table")
+    List<Task> getAlphabetizedTasksSynced();
+
     @Query("SELECT * FROM tasks_table WHERE _id == :id")
     LiveData<Task> getTask(int id);
+
+    @Query("SELECT * FROM tasks_table WHERE _id == :id")
+    Task getTaskSynced(int id);
+
+    @Query("UPDATE tasks_table SET isPlaying = :state WHERE _id == :id")
+    void setTaskPlaying(int id, boolean state);
 
     @Update
     void updateTask(Task task);
