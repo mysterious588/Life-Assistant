@@ -35,8 +35,11 @@ public class TaskProgressService extends LifecycleService {
             List<Task> tasks = mTaskViewModel.getAllTasksSynced();
             for (int i = 0; i < tasks.size(); i++) {
                 Task task = tasks.get(i);
-                if (task.isPlaying() && task.getProgress() <= task.getDuration()) {
+                if (task.isPlaying() && !task.isIcCompleted()) {
                     task.setProgress(task.getProgress() + 1);
+                    if (task.getProgress() >= task.getDuration()) {
+                        task.setIcCompleted(true);
+                    }
                     mTaskViewModel.updateTask(task);
                 }
             }
@@ -52,7 +55,7 @@ public class TaskProgressService extends LifecycleService {
             return;
         }
         timer = new Timer();
-        timer.scheduleAtFixedRate(timerTask, 0, 60 * 1000);
+        timer.scheduleAtFixedRate(timerTask, 0, 60000);
     }
 
     public void stop() {
