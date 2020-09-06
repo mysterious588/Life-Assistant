@@ -35,14 +35,10 @@ public abstract class TaskDatabase extends RoomDatabase {
         return INSTANCE;
     }
 
-    // TODO: add the onCreate and fix the onOpen
     private static RoomDatabase.Callback sRoomDatabaseCallback = new RoomDatabase.Callback() {
         @Override
         public void onCreate(@NonNull SupportSQLiteDatabase db) {
             super.onCreate(db);
-
-            // If you want to keep data through app restarts,
-            // comment out the following block
             databaseWriteExecutor.execute(() -> {
                 // Populate the database in the background.
                 // If you want to start with more words, just add them.

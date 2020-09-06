@@ -101,6 +101,7 @@ public class TypeStep extends Step<String> {
             if (chosenState == TIMED) verticalStepperFormView.removeStep(2);
             chosenState = PROGRESSIVE;
             // TODO add progressive logic
+
         } else {
             // nothing is picked
             if (chosenState != UNDEFINED & chosenState != TIMED) {

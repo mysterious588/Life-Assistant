@@ -41,14 +41,18 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         TextView titleTextView = holder.titleTextView;
         TextView detailsTextView = holder.detailsTextView;
         TextView typeTextView = holder.typeTextView;
+        TextView progressTextView = holder.progressTextView;
         ProgressView progressView = holder.progressView;
 
-        titleTextView.setText(dataSet.get(listPosition).getTitle());
-        detailsTextView.setText(dataSet.get(listPosition).getDetails());
-        progressView.setMax(dataSet.get(listPosition).getDuration());
-        progressView.setProgress(dataSet.get(listPosition).getProgress());
+        Task task = dataSet.get(listPosition);
 
-        if (dataSet.get(listPosition).getType() == Task.TIMED) typeTextView.setText(R.string.Timed);
+        titleTextView.setText(task.getTitle());
+        detailsTextView.setText(task.getDetails());
+        progressTextView.setText(String.format("%d/%d mins", (int) task.getProgress(), task.getDuration()));
+        progressView.setMax(task.getDuration());
+        progressView.setProgress(task.getProgress());
+
+        if (task.getType() == Task.TIMED) typeTextView.setText(R.string.Timed);
         else typeTextView.setText(R.string.Progressive);
     }
 
@@ -60,7 +64,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
-        TextView titleTextView, detailsTextView, typeTextView;
+        TextView titleTextView, detailsTextView, typeTextView, progressTextView;
         ProgressView progressView;
 
         public ViewHolder(View itemView) {
@@ -69,6 +73,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             this.detailsTextView = itemView.findViewById(R.id.detailsTextView);
             this.typeTextView = itemView.findViewById(R.id.typeTextView);
             this.progressView = itemView.findViewById(R.id.progressView);
+            this.progressTextView = itemView.findViewById(R.id.progressTextView);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
