@@ -3,4 +3,6 @@
     <string name="action_settings">Settings</string>
     <string name="Timed">Timed</string>
     <string name="Progressive">Progressive</string>
+    <string name="progress">Progress</string>
+    <string name="type">Type</string>
 </resources>

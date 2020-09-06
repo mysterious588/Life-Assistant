@@ -22,6 +22,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.ismaeldivita.chipnavigation.ChipNavigationBar;
 import com.khaledz.lifeassistance.R;
 import com.lifeassistance.Adapters.RecyclerViewAdapter;
 import com.lifeassistance.Database.Task;
@@ -147,6 +148,21 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(view -> {
             fab.setEnabled(false); // avoid multiple clicks
             startActivity(new Intent(this, StepActivity.class));
+        });
+        ChipNavigationBar chipNavigationBar = findViewById(R.id.navigationView);
+        chipNavigationBar.setItemSelected(R.id.homeNavigation, true);
+        chipNavigationBar.setOnItemSelectedListener(new ChipNavigationBar.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(int i) {
+                Log.d(TAG, "new item selected: " + i);
+                switch (i) {
+                    case R.id.homeNavigation:
+
+                        break;
+                    case R.id.activityNavigation:
+
+                }
+            }
         });
     }
 
