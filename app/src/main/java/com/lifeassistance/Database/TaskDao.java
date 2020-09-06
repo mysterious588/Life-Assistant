@@ -20,7 +20,7 @@ public interface TaskDao {
     @Query("DELETE FROM tasks_table")
     void deleteAll();
 
-    @Query("SELECT * FROM tasks_table")
+    @Query("SELECT * FROM tasks_table ORDER BY icCompleted, date")
     LiveData<List<Task>> getAlphabetizedTasks();
 
     @Query("SELECT * FROM tasks_table")

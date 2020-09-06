@@ -12,6 +12,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -52,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
         colorArcProgressBar.setCurrentValues(task.getProgress());
         dialog.show();
 
-        if (task.getType() == Task.TIMED) {
+        if (task.getType() == Task.TIMED && !task.isIcCompleted()) {
             PlayPauseView playPauseView = dialog.findViewById(R.id.play_pause_view);
             if (task.isPlaying()) playPauseView.change(false, false);
             playPauseView.setVisibility(View.VISIBLE);
@@ -70,6 +71,10 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
             });
+        }
+        if (task.isIcCompleted()) {
+            TextView wellDoneTextView = dialog.findViewById(R.id.wellDoneTextView);
+            wellDoneTextView.setVisibility(View.VISIBLE);
         }
     }
 

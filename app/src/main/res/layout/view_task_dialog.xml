@@ -20,7 +20,6 @@
         app:total_engle="360" />
 
     <com.ohoussein.playpause.PlayPauseView
-        android:visibility="gone"
         android:id="@+id/play_pause_view"
         android:layout_width="80dp"
         android:layout_height="80dp"
@@ -28,8 +27,21 @@
         android:layout_margin="16dp"
         android:clickable="true"
         android:foreground="?android:selectableItemBackground"
+        android:visibility="gone"
         app:pause_bg="@color/colorPrimary"
         app:play_bg="@color/colorPrimary" />
+
+    <TextView
+        android:id="@+id/wellDoneTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="8dp"
+        android:text="Well Done"
+        android:textColor="@color/colorPrimary"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:visibility="gone" />
     <!--
         <LinearLayout
             android:layout_width="wrap_content"
