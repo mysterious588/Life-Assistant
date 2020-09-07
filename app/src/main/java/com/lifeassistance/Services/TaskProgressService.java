@@ -1,4 +1,4 @@
-package com.lifeassistance.Activities;
+package com.lifeassistance.Services;
 
 import android.app.Notification;
 import android.app.NotificationChannel;
@@ -13,7 +13,6 @@ import androidx.core.app.NotificationCompat;
 import androidx.lifecycle.LifecycleService;
 
 import com.lifeassistance.Database.Task;
-import com.lifeassistance.Database.TaskRepository;
 import com.lifeassistance.ViewModels.TaskViewModel;
 
 import java.util.List;
@@ -25,7 +24,6 @@ public class TaskProgressService extends LifecycleService {
     private static final String TAG = "Task Progress Service";
 
     TaskViewModel mTaskViewModel;
-    TaskRepository mTaskRepository;
 
     private Timer timer;
     private TimerTask timerTask = new TimerTask() {
@@ -35,10 +33,10 @@ public class TaskProgressService extends LifecycleService {
             List<Task> tasks = mTaskViewModel.getAllTasksSynced();
             for (int i = 0; i < tasks.size(); i++) {
                 Task task = tasks.get(i);
-                if (task.isPlaying() && !task.isIcCompleted()) {
+                if (task.isPlaying() && !task.isCompleted()) {
                     task.setProgress(task.getProgress() + 1);
                     if (task.getProgress() >= task.getDuration()) {
-                        task.setIcCompleted(true);
+                        task.setCompleted(true);
                     }
                     mTaskViewModel.updateTask(task);
                 }
@@ -82,8 +80,6 @@ public class TaskProgressService extends LifecycleService {
                     setContentText("Here").build();
             Log.d(TAG, "binding service");
             startForeground(1, notification);
-
-            mTaskRepository = new TaskRepository(getApplication());
             start();
         }
     }
