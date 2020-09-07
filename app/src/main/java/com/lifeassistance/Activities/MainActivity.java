@@ -31,6 +31,9 @@ import com.lifeassistance.ViewModels.TaskViewModel;
 import com.ohoussein.playpause.PlayPauseView;
 import com.shinelw.library.ColorArcProgressBar;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
@@ -42,6 +45,8 @@ public class MainActivity extends AppCompatActivity {
     private static TaskViewModel mTaskViewModel;
     private static ColorArcProgressBar colorArcProgressBar;
 
+    private static TextView progressTextViewItemView;
+
     private FloatingActionButton fab;
 
     private static RecyclerViewAdapter adapter;
@@ -50,16 +55,26 @@ public class MainActivity extends AppCompatActivity {
     private static Observer<List<Task>> currentObserver;
 
     public static void viewTaskDialog(Context context, Task task, View v) {
+
         selectedTask = task.get_id();
-        Log.d(TAG, "showing dialog");
         final Dialog dialog = new Dialog(context);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setCancelable(true);
         dialog.setContentView(R.layout.view_task_dialog);
+
+        TextView dateTextView = dialog.findViewById(R.id.dateViewItemTextView);
+        progressTextViewItemView = dialog.findViewById(R.id.progressViewItemTextView);
+
+        String days = ChronoUnit.DAYS.between(task.getDate(), LocalDateTime.now()) + "";
+        DateTimeFormatter hourMinuteFormatter = DateTimeFormatter.ofPattern("HH:mm");
+        dateTextView.setText(String.format("%s days ago %s", days, task.getDate().format(hourMinuteFormatter)));
+
         colorArcProgressBar = dialog.findViewById(R.id.circularProgressBar);
         Log.d(TAG + " progress", Float.toString(task.getProgress()));
         colorArcProgressBar.setMaxValues(task.getDuration());
         colorArcProgressBar.setCurrentValues(task.getProgress());
+
+        updateDialogUi(task);
         dialog.show();
 
         if (task.getType() == Task.TIMED && !task.isCompleted()) {
@@ -83,8 +98,8 @@ public class MainActivity extends AppCompatActivity {
             });
         }
         if (task.isCompleted()) {
-            TextView wellDoneTextView = dialog.findViewById(R.id.wellDoneTextView);
-            wellDoneTextView.setVisibility(View.VISIBLE);
+//            TextView wellDoneTextView = dialog.findViewById(R.id.wellDoneTextView);
+//            wellDoneTextView.setVisibility(View.VISIBLE);
         }
     }
 
@@ -187,6 +202,17 @@ public class MainActivity extends AppCompatActivity {
         initChipNavigationBar();
     }
 
+    private static void updateDialogUi(Task task) {
+        colorArcProgressBar.setCurrentValues(task.getProgress());
+
+        if (task.isCompleted()) {
+            progressTextViewItemView.setTextSize(24);
+            progressTextViewItemView.setText(R.string.Completed);
+            colorArcProgressBar.setUnit("Completed");
+        } else if (task.getType() == Task.TIMED)
+            progressTextViewItemView.setText(String.format("%d mins remaining", task.getDuration() - (int) task.getProgress()));
+    }
+
     private void initObservers() {
         allTasksObserver = new Observer<List<Task>>() {
             @Override
@@ -195,7 +221,7 @@ public class MainActivity extends AppCompatActivity {
                 for (int i = 0; i < tasks.size(); i++) {
                     Log.d(TAG, "New task found allObservers: " + tasks.get(i).getTitle());
                     if (colorArcProgressBar != null && tasks.get(i).get_id() == selectedTask) {
-                        colorArcProgressBar.setCurrentValues(tasks.get(i).getProgress());
+                        updateDialogUi(tasks.get(i));
                     }
                     if (currentObserver.equals(allTasksObserver)) {
                         adapter.setDataSet(tasks);
@@ -211,7 +237,7 @@ public class MainActivity extends AppCompatActivity {
                 for (int i = 0; i < tasks.size(); i++) {
                     Log.d(TAG, "New task found completedObservers: " + tasks.get(i).getTitle());
                     if (colorArcProgressBar != null && tasks.get(i).get_id() == selectedTask) {
-                        colorArcProgressBar.setCurrentValues(tasks.get(i).getProgress());
+                        updateDialogUi(tasks.get(i));
                     }
                     if (currentObserver.equals(completedTasksObserver)) {
                         adapter.setDataSet(tasks);
@@ -225,7 +251,7 @@ public class MainActivity extends AppCompatActivity {
             for (int i = 0; i < tasks.size(); i++) {
                 Log.d(TAG, "New task found unCompletedObservers: " + tasks.get(i).getTitle());
                 if (colorArcProgressBar != null && tasks.get(i).get_id() == selectedTask) {
-                    colorArcProgressBar.setCurrentValues(tasks.get(i).getProgress());
+                    updateDialogUi(tasks.get(i));
                 }
                 if (currentObserver.equals(incompleteTasksObserver)) {
                     adapter.setDataSet(tasks);

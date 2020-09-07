@@ -19,20 +19,33 @@
         app:string_unit="progress"
         app:total_engle="360" />
 
-    <com.ohoussein.playpause.PlayPauseView
-        android:id="@+id/play_pause_view"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        android:layout_gravity="center"
-        android:layout_margin="16dp"
-        android:clickable="true"
-        android:foreground="?android:selectableItemBackground"
-        android:visibility="gone"
-        app:pause_bg="@color/colorPrimary"
-        app:play_bg="@color/colorPrimary" />
 
     <TextView
-        android:id="@+id/wellDoneTextView"
+        android:id="@+id/dateViewItemTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="8dp"
+        android:fontFamily="casual"
+        android:text="15/10/2020"
+        android:textColor="@color/colorPrimary"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+
+    <TextView
+        android:id="@+id/progressViewItemTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="8dp"
+        android:fontFamily="casual"
+        android:text="15/60"
+        android:textColor="@color/colorPrimary"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
@@ -42,6 +55,18 @@
         android:textSize="24sp"
         android:textStyle="bold"
         android:visibility="gone" />
+
+    <com.ohoussein.playpause.PlayPauseView
+        android:id="@+id/play_pause_view"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_gravity="center"
+        android:layout_margin="16dp"
+        android:clickable="true"
+        android:foreground="?android:selectableItemBackground"
+        android:visibility="gone"
+        app:pause_bg="@color/colorPrimary"
+        app:play_bg="@color/colorPrimary" />
     <!--
         <LinearLayout
             android:layout_width="wrap_content"
@@ -60,5 +85,5 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="8dp"
                 android:text="finish" />
-        </LinearLayout>-->
+        </LinearLayout> -->
 </LinearLayout>

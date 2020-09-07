@@ -11,7 +11,10 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:padding="16dp"
+        android:paddingLeft="16dp"
+        android:paddingTop="16dp"
+        android:paddingRight="16dp"
+
         android:scrollbars="vertical" />
 
     <LinearLayout
@@ -37,7 +40,8 @@
             android:layout_marginRight="@dimen/fab_margin"
             android:layout_marginBottom="@dimen/fab_margin"
             app:backgroundTint="@color/colorAccent"
-            app:srcCompat="@drawable/sharp_add_white_48dp" />
+            app:srcCompat="@drawable/sharp_add_white_48dp"
+            app:tint="@color/colorWhite" />
     </LinearLayout>
 
 </LinearLayout>
