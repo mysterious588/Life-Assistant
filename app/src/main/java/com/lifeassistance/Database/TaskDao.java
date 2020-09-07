@@ -20,7 +20,7 @@ public interface TaskDao {
     @Query("DELETE FROM tasks_table")
     void deleteAll();
 
-    @Query("SELECT * FROM tasks_table ORDER BY icCompleted, date")
+    @Query("SELECT * FROM tasks_table ORDER BY isCompleted, date")
     LiveData<List<Task>> getAlphabetizedTasks();
 
     @Query("SELECT * FROM tasks_table")
@@ -34,6 +34,12 @@ public interface TaskDao {
 
     @Query("UPDATE tasks_table SET isPlaying = :state WHERE _id == :id")
     void setTaskPlaying(int id, boolean state);
+
+    @Query("SELECT * FROM tasks_table WHERE isCompleted ORDER BY date")
+    LiveData<List<Task>> getCompletedTasks();
+
+    @Query("SELECT * FROM tasks_table WHERE isCompleted == 0 ORDER BY date")
+    LiveData<List<Task>> getUnCompletedTasks();
 
     @Update
     void updateTask(Task task);

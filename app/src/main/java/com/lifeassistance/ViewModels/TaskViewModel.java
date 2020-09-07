@@ -42,6 +42,14 @@ public class TaskViewModel extends AndroidViewModel {
         return mRepository.getTaskSynced(id);
     }
 
+    public LiveData<List<Task>> getCompletedTasks() {
+        return mRepository.getCompletedTasks();
+    }
+
+    public LiveData<List<Task>> getUnCompletedTasks() {
+        return mRepository.getUnCompletedTasks();
+    }
+
     public void updateTask(Task task) {
         mRepository.updateTask(task);
     }

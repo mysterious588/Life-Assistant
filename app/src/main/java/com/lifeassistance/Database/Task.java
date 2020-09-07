@@ -19,7 +19,7 @@ public class Task {
     private float progress;
     private int duration, type;
     private LocalDateTime date;
-    private boolean isPlaying = false, icCompleted = false;
+    private boolean isPlaying = false, isCompleted = false;
 
     public Task(String title, int type, float progress, int duration, LocalDateTime date) {
         this.title = title;
@@ -38,12 +38,12 @@ public class Task {
         isPlaying = playing;
     }
 
-    public boolean isIcCompleted() {
-        return icCompleted;
+    public boolean isCompleted() {
+        return isCompleted;
     }
 
-    public void setIcCompleted(boolean icCompleted) {
-        this.icCompleted = icCompleted;
+    public void setCompleted(boolean completed) {
+        this.isCompleted = completed;
     }
 
     public LocalDateTime getDate() {

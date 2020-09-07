@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?><!-- bottom_menu.xml -->
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/allTasksMenuItem"
+        android:icon="@drawable/baseline_clear_all_white_48"
+        android:title="All"
+        app:cnb_iconColor="@color/colorPrimary" />
+    <item
+        android:id="@+id/completeTasksMenuItem"
+        android:icon="@drawable/baseline_done_white_48dp"
+        android:title="Completed"
+        app:cnb_iconColor="@color/colorPrimary" />
+    <item
+        android:id="@+id/incompleteTasksMenuItem"
+        android:icon="@drawable/baseline_hourglass_bottom_white_48dp"
+        android:title="Incomplete"
+        app:cnb_iconColor="@color/colorPrimary" />
+
+</menu>

@@ -12,12 +12,12 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <receiver
-            android:name="com.lifeassistance.Activities.CallTaskProgressService"
+            android:name="com.lifeassistance.Services.CallTaskProgressService"
             android:enabled="true"
             android:exported="true"></receiver>
 
         <service
-            android:name="com.lifeassistance.Activities.TaskProgressService"
+            android:name="com.lifeassistance.Services.TaskProgressService"
             android:enabled="true"
             android:exported="true" />
 

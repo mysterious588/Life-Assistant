@@ -1,5 +1,6 @@
 package com.lifeassistance.Adapters;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,7 +26,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     public void setDataSet(List<Task> dataSet) {
         RecyclerViewAdapter.dataSet = dataSet;
-        notifyDataSetChanged();
     }
 
     @NonNull
@@ -58,6 +58,10 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     @Override
     public int getItemCount() {
+        try {
+            Log.d("rec", "" + dataSet.size());
+        } catch (Exception ignored) {
+        }
         if (dataSet != null) return dataSet.size();
         else return 0;
     }
@@ -91,7 +95,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                     int pos = getAdapterPosition();
                     if (pos != RecyclerView.NO_POSITION) {
                         Task task = dataSet.get(pos);
-                        MainActivity.deleteTask(view.getContext(), task);
+                        MainActivity.deleteTask(view.getContext(), task, pos);
                     }
                     return true;
                 }
