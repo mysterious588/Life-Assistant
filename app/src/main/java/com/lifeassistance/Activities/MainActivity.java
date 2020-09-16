@@ -65,9 +65,9 @@ public class MainActivity extends AppCompatActivity {
         TextView dateTextView = dialog.findViewById(R.id.dateViewItemTextView);
         progressTextViewItemView = dialog.findViewById(R.id.progressViewItemTextView);
 
-        String days = ChronoUnit.DAYS.between(task.getDate(), LocalDateTime.now()) + "";
-        DateTimeFormatter hourMinuteFormatter = DateTimeFormatter.ofPattern("HH:mm");
-        dateTextView.setText(String.format("%s days ago %s", days, task.getDate().format(hourMinuteFormatter)));
+        String days = ChronoUnit.DAYS.between(task.getDateAdded(), LocalDateTime.now()) + "";
+        DateTimeFormatter hourMinuteFormatter = DateTimeFormatter.ofPattern("H:mm a  ");
+        dateTextView.setText(String.format("%s days ago %s", days, task.getDateAdded().format(hourMinuteFormatter)));
 
         colorArcProgressBar = dialog.findViewById(R.id.circularProgressBar);
         Log.d(TAG + " progress", Float.toString(task.getProgress()));

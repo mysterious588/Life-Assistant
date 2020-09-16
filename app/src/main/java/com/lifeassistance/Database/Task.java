@@ -5,8 +5,9 @@ import androidx.room.PrimaryKey;
 import androidx.room.TypeConverters;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 
-@TypeConverters({LocalDateTimeConverter.class})
+@TypeConverters({LocalDateTimeConverter.class, ArrayListConverter.class})
 @Entity(tableName = "tasks_table")
 public class Task {
     public static final int TIMED = 0;
@@ -18,16 +19,49 @@ public class Task {
     private String title, details;
     private float progress;
     private int duration, type;
-    private LocalDateTime date;
-    private boolean isPlaying = false, isCompleted = false;
+    private LocalDateTime dateAdded, dateDeadline;
+    private boolean isPlaying = false, isCompleted = false, archived = false, isRepeating = false;
+    private ArrayList<String> subTasks;
 
-    public Task(String title, int type, float progress, int duration, LocalDateTime date) {
+
+    public Task(String title, int type, float progress, int duration, LocalDateTime dateAdded) {
         this.title = title;
-        this.details = details;
         this.type = type;
         this.progress = progress;
         this.duration = duration;
-        this.date = date;
+        this.dateAdded = dateAdded;
+    }
+
+    public LocalDateTime getDateDeadline() {
+        return dateDeadline;
+    }
+
+    public void setDateDeadline(LocalDateTime dateDeadline) {
+        this.dateDeadline = dateDeadline;
+    }
+
+    public boolean isArchived() {
+        return archived;
+    }
+
+    public void setArchived(boolean archived) {
+        this.archived = archived;
+    }
+
+    public ArrayList<String> getSubTasks() {
+        return subTasks;
+    }
+
+    public void setSubTasks(ArrayList<String> subTasks) {
+        this.subTasks = subTasks;
+    }
+
+    public boolean isRepeating() {
+        return isRepeating;
+    }
+
+    public void setRepeating(boolean repeating) {
+        isRepeating = repeating;
     }
 
     public boolean isPlaying() {
@@ -46,12 +80,12 @@ public class Task {
         this.isCompleted = completed;
     }
 
-    public LocalDateTime getDate() {
-        return date;
+    public LocalDateTime getDateAdded() {
+        return dateAdded;
     }
 
-    public void setDate(LocalDateTime date) {
-        this.date = date;
+    public void setDateAdded(LocalDateTime dateAdded) {
+        this.dateAdded = dateAdded;
     }
 
     public int get_id() {

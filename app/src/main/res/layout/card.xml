@@ -128,7 +128,6 @@
                 app:progressView_colorBackground="@color/colorWhite"
                 app:progressView_min="0"
                 app:progressView_padding="1dp"
-                app:progressView_progress="40"
                 app:progressView_progressFromPrevious="true"
                 app:progressView_radius="6dp" />
         </LinearLayout>

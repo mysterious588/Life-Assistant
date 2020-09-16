@@ -67,7 +67,7 @@ public class StepActivity extends Activity implements StepperFormListener {
         Log.d(TAG, "id: " + task.get_id());
         Log.d(TAG, "type: " + task.getType());
         Log.d(TAG, "title: " + task.getTitle());
-        Log.d(TAG, "date: " + task.getDate().toString());
+        Log.d(TAG, "date: " + task.getDateAdded().toString());
 
         TaskViewModel taskViewModel = new TaskViewModel(getApplication());
         taskViewModel.insert(task);
