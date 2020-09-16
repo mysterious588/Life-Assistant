@@ -7,7 +7,6 @@ import ernestoyaquello.com.verticalstepperform.Step;
 
 public class TimePIckStep extends Step<Integer> {
 
-    int minute;
     private NumberPicker timePicker;
 
     public TimePIckStep(String stepTitle) {

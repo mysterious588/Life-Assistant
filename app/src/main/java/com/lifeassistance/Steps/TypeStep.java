@@ -5,6 +5,8 @@ import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
+import java.util.ArrayList;
+
 import ernestoyaquello.com.verticalstepperform.Step;
 import ernestoyaquello.com.verticalstepperform.VerticalStepperFormView;
 
@@ -18,8 +20,10 @@ public class TypeStep extends Step<String> {
     private RadioGroup mRadioGroup;
     private RadioButton timedRadioButton, progressiveRadioButton;
     private static int duration;
+    private static ArrayList<String> milestones;
     private VerticalStepperFormView verticalStepperFormView;
     private TimePIckStep timePIckStep;
+    private ProgressiveListStep progressiveListStep;
     private int chosenState = UNDEFINED;
 
     public TypeStep(String stepTitle, VerticalStepperFormView verticalStepperFormView) {
@@ -33,6 +37,14 @@ public class TypeStep extends Step<String> {
 
     public static void setDuration(int duration) {
         TypeStep.duration = duration;
+    }
+
+    public static ArrayList<String> getMilestones() {
+        return milestones;
+    }
+
+    public static void setMilestones(ArrayList<String> milestones) {
+        TypeStep.milestones = milestones;
     }
 
     @Override
@@ -96,15 +108,16 @@ public class TypeStep extends Step<String> {
             verticalStepperFormView.addStep(2, timePIckStep);
             chosenState = TIMED;
 
-        } else if (getStepData().equals("Progressive")) {
+        } else if (getStepData().equals("Progressive") && chosenState != PROGRESSIVE) {
             // progressive is picked
+            progressiveListStep = new ProgressiveListStep("Milestones", "MS");
             if (chosenState == TIMED) verticalStepperFormView.removeStep(2);
             chosenState = PROGRESSIVE;
-            // TODO add progressive logic
+            verticalStepperFormView.addStep(2, progressiveListStep);
 
         } else {
             // nothing is picked
-            if (chosenState != UNDEFINED & chosenState != TIMED) {
+            if (chosenState != UNDEFINED & chosenState != TIMED & chosenState != PROGRESSIVE) {
                 verticalStepperFormView.removeStep(2);
                 chosenState = DEFINED;
             }

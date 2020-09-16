@@ -12,7 +12,6 @@ import androidx.annotation.RequiresApi;
 import com.khaledz.lifeassistance.R;
 import com.lifeassistance.Database.Task;
 import com.lifeassistance.Steps.EditTextStep;
-import com.lifeassistance.Steps.TimePIckStep;
 import com.lifeassistance.Steps.TypeStep;
 import com.lifeassistance.ViewModels.TaskViewModel;
 
@@ -27,7 +26,6 @@ public class StepActivity extends Activity implements StepperFormListener {
 
     private EditTextStep titleEditText;
     private TypeStep typeStep;
-    private TimePIckStep timePIckStep;
 
     private VerticalStepperFormView verticalStepperForm;
 
@@ -42,7 +40,6 @@ public class StepActivity extends Activity implements StepperFormListener {
 
         // Create the steps.
         titleEditText = new EditTextStep("Task Title", "title");
-        timePIckStep = new TimePIckStep("Duration (minutes)");
 
         // Find the form view, set it up and initialize it.
         verticalStepperForm = findViewById(R.id.stepper_forms);
@@ -63,6 +60,7 @@ public class StepActivity extends Activity implements StepperFormListener {
         int type = typeString.equals("Timed") ? Task.TIMED : Task.PROGRESSIVE;
         Log.d(TAG, "duration " + TypeStep.getDuration());
         Task task = new Task(titleEditText.getStepData(), type, 0, TypeStep.getDuration(), LocalDateTime.now());
+        if (TypeStep.getMilestones() != null) task.setSubTasks(TypeStep.getMilestones());
 
         Log.d(TAG, "id: " + task.get_id());
         Log.d(TAG, "type: " + task.getType());
