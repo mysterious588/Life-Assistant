@@ -223,11 +223,13 @@ public class MainActivity extends AppCompatActivity {
                 progressiveTasksRecyclerView.setLayoutManager(new LinearLayoutManager(context));
                 progressiveTasksRecyclerView.setVisibility(View.VISIBLE);
             }
-        } else if (task.getType() == Task.TIMED)
+        } else if (task.getType() == Task.TIMED) {
             progressTextViewItemView.setText(String.format("%d mins remaining", task.getDuration() - (int) task.getProgress()));
-        else {
+            colorArcProgressBar.setUnit("progress");
+        } else {
+            colorArcProgressBar.setUnit("progress");
             Log.d(TAG, "Launching milestones");
-            progressTextViewItemView.setText(String.format("%d tasks remaining", task.getDuration() - (int) task.getProgress()));
+            progressTextViewItemView.setText(String.format("%d task(s) remaining", task.getDuration() - (int) task.getProgress()));
             ProgressiveTasksAdapter adapter = new ProgressiveTasksAdapter(task);
             progressiveTasksRecyclerView.setAdapter(adapter);
             progressiveTasksRecyclerView.setLayoutManager(new LinearLayoutManager(context));
