@@ -35,10 +35,10 @@ public interface TaskDao {
     @Query("UPDATE tasks_table SET isPlaying = :state WHERE _id == :id")
     void setTaskPlaying(int id, boolean state);
 
-    @Query("SELECT * FROM tasks_table WHERE isCompleted ORDER BY dateAdded")
+    @Query("SELECT * FROM tasks_table WHERE isCompleted = 1 ORDER BY dateAdded")
     LiveData<List<Task>> getCompletedTasks();
 
-    @Query("SELECT * FROM tasks_table WHERE isCompleted == 0 ORDER BY dateAdded")
+    @Query("SELECT * FROM tasks_table WHERE isCompleted = 0 ORDER BY dateAdded")
     LiveData<List<Task>> getUnCompletedTasks();
 
     @Update

@@ -55,7 +55,7 @@ public class TypeStep extends Step<String> {
         timedRadioButton = new RadioButton(getContext());
         timedRadioButton.setText("Timed");
         progressiveRadioButton = new RadioButton(getContext());
-        progressiveRadioButton.setText("progressive");
+        progressiveRadioButton.setText("Progressive");
         mRadioGroup.addView(timedRadioButton);
         mRadioGroup.addView(progressiveRadioButton);
         mRadioGroup.setOrientation(LinearLayout.HORIZONTAL);
@@ -101,7 +101,7 @@ public class TypeStep extends Step<String> {
         // This will be called automatically whenever the step gets closed.
         if (getStepData().equals("Timed") && chosenState != TIMED) {
             // timed is picked
-            timePIckStep = new TimePIckStep("Duraion (minutes)");
+            timePIckStep = new TimePIckStep("Duration (minutes)");
             if (chosenState == PROGRESSIVE) {
                 verticalStepperFormView.removeStep(2);
             }
