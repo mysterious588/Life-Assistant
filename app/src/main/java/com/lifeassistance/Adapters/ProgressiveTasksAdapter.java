@@ -96,6 +96,8 @@ public class ProgressiveTasksAdapter extends RecyclerView.Adapter<ProgressiveTas
                     for (int i = 0; i < states.size(); i++)
                         if (states.get(i)) progress++;
                     mTask.setProgress(progress);
+                    if (progress == states.size()) mTask.setCompleted(true);
+                    else mTask.setCompleted(false);
                     TaskViewModel taskViewModel = new TaskViewModel((Application) itemView.getContext().getApplicationContext());
                     taskViewModel.updateTask(mTask);
                 }

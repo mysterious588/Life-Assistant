@@ -217,6 +217,12 @@ public class MainActivity extends AppCompatActivity {
             progressTextViewItemView.setTextSize(24);
             progressTextViewItemView.setText(R.string.Completed);
             colorArcProgressBar.setUnit("Completed");
+            if (task.getType() == Task.PROGRESSIVE) {
+                ProgressiveTasksAdapter adapter = new ProgressiveTasksAdapter(task);
+                progressiveTasksRecyclerView.setAdapter(adapter);
+                progressiveTasksRecyclerView.setLayoutManager(new LinearLayoutManager(context));
+                progressiveTasksRecyclerView.setVisibility(View.VISIBLE);
+            }
         } else if (task.getType() == Task.TIMED)
             progressTextViewItemView.setText(String.format("%d mins remaining", task.getDuration() - (int) task.getProgress()));
         else {
