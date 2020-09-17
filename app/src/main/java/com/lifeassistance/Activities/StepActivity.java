@@ -16,6 +16,7 @@ import com.lifeassistance.Steps.TypeStep;
 import com.lifeassistance.ViewModels.TaskViewModel;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 
 import ernestoyaquello.com.verticalstepperform.VerticalStepperFormView;
 import ernestoyaquello.com.verticalstepperform.listener.StepperFormListener;
@@ -60,7 +61,14 @@ public class StepActivity extends Activity implements StepperFormListener {
         int type = typeString.equals("Timed") ? Task.TIMED : Task.PROGRESSIVE;
         Log.d(TAG, "duration " + TypeStep.getDuration());
         Task task = new Task(titleEditText.getStepData(), type, 0, TypeStep.getDuration(), LocalDateTime.now());
-        if (TypeStep.getMilestones() != null) task.setSubTasks(TypeStep.getMilestones());
+        if (TypeStep.getMilestones() != null) {
+            task.setSubTasks(TypeStep.getMilestones());
+            ArrayList<Boolean> states = new ArrayList<>();
+            for (int i = 0; i < TypeStep.getMilestones().size(); i++)
+                states.add(false);
+            task.setSubTasksState(states);
+            task.setDuration(task.getSubTasks().size());
+        }
 
         Log.d(TAG, "id: " + task.get_id());
         Log.d(TAG, "type: " + task.getType());

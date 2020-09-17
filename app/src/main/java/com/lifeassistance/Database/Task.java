@@ -7,7 +7,7 @@ import androidx.room.TypeConverters;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
-@TypeConverters({LocalDateTimeConverter.class, ArrayListConverter.class})
+@TypeConverters({LocalDateTimeConverter.class, StringArrayListConverter.class, BooleanArrayListConverter.class})
 @Entity(tableName = "tasks_table")
 public class Task {
     public static final int TIMED = 0;
@@ -22,6 +22,7 @@ public class Task {
     private LocalDateTime dateAdded, dateDeadline;
     private boolean isPlaying = false, isCompleted = false, archived = false, isRepeating = false;
     private ArrayList<String> subTasks;
+    private ArrayList<Boolean> subTasksState;
 
 
     public Task(String title, int type, float progress, int duration, LocalDateTime dateAdded) {
@@ -122,6 +123,14 @@ public class Task {
 
     public void setDuration(int duration) {
         this.duration = duration;
+    }
+
+    public ArrayList<Boolean> getSubTasksState() {
+        return subTasksState;
+    }
+
+    public void setSubTasksState(ArrayList<Boolean> subTasksState) {
+        this.subTasksState = subTasksState;
     }
 
     public int getType() {

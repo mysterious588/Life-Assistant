@@ -67,23 +67,11 @@
         android:visibility="gone"
         app:pause_bg="@color/colorPrimary"
         app:play_bg="@color/colorPrimary" />
-    <!--
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="right"
-            android:orientation="horizontal">
 
-            <com.google.android.material.button.MaterialButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="8dp"
-                android:text="dismiss" />
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/tasksDialogRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone" />
 
-            <com.google.android.material.button.MaterialButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="8dp"
-                android:text="finish" />
-        </LinearLayout> -->
 </LinearLayout>

@@ -48,7 +48,10 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
         titleTextView.setText(task.getTitle());
         detailsTextView.setText(task.getDetails());
-        progressTextView.setText(String.format("%d/%d mins", (int) task.getProgress(), task.getDuration()));
+        if (task.getType() == Task.TIMED)
+            progressTextView.setText(String.format("%d/%d mins", (int) task.getProgress(), task.getDuration()));
+        else
+            progressTextView.setText(String.format("%d/%d tasks", (int) task.getProgress(), task.getDuration()));
         progressView.setMax(task.getDuration());
         progressView.setProgress(task.getProgress());
 

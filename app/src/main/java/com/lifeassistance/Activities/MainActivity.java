@@ -24,6 +24,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.ismaeldivita.chipnavigation.ChipNavigationBar;
 import com.khaledz.lifeassistance.R;
+import com.lifeassistance.Adapters.ProgressiveTasksAdapter;
 import com.lifeassistance.Adapters.RecyclerViewAdapter;
 import com.lifeassistance.Database.Task;
 import com.lifeassistance.Services.TaskProgressService;
@@ -51,6 +52,8 @@ public class MainActivity extends AppCompatActivity {
 
     private static RecyclerViewAdapter adapter;
 
+    private static RecyclerView progressiveTasksRecyclerView;
+
     private static Observer<List<Task>> allTasksObserver, incompleteTasksObserver, completedTasksObserver;
     private static Observer<List<Task>> currentObserver;
 
@@ -74,7 +77,9 @@ public class MainActivity extends AppCompatActivity {
         colorArcProgressBar.setMaxValues(task.getDuration());
         colorArcProgressBar.setCurrentValues(task.getProgress());
 
-        updateDialogUi(task);
+        progressiveTasksRecyclerView = dialog.findViewById(R.id.tasksDialogRecyclerView);
+
+        updateDialogUi(task, context);
         dialog.show();
 
         if (task.getType() == Task.TIMED && !task.isCompleted()) {
@@ -132,7 +137,10 @@ public class MainActivity extends AppCompatActivity {
         };
 
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setMessage("Are you sure you want to remove this?").setPositiveButton("Yes", dialogClickListener).setNegativeButton("No", dialogClickListener).show();
+        builder.setMessage("Are you sure you want to remove this?").
+                setPositiveButton("Yes", dialogClickListener).
+                setNegativeButton("No", dialogClickListener).
+                show();
     }
 
     private static void removeAllObservers(Observer keep) {
@@ -202,7 +210,7 @@ public class MainActivity extends AppCompatActivity {
         initChipNavigationBar();
     }
 
-    private static void updateDialogUi(Task task) {
+    private static void updateDialogUi(Task task, Context context) {
         colorArcProgressBar.setCurrentValues(task.getProgress());
 
         if (task.isCompleted()) {
@@ -211,54 +219,19 @@ public class MainActivity extends AppCompatActivity {
             colorArcProgressBar.setUnit("Completed");
         } else if (task.getType() == Task.TIMED)
             progressTextViewItemView.setText(String.format("%d mins remaining", task.getDuration() - (int) task.getProgress()));
+        else {
+            Log.d(TAG, "Launching milestones");
+            progressTextViewItemView.setText(String.format("%d tasks remaining", task.getDuration() - (int) task.getProgress()));
+            ProgressiveTasksAdapter adapter = new ProgressiveTasksAdapter(task);
+            progressiveTasksRecyclerView.setAdapter(adapter);
+            progressiveTasksRecyclerView.setLayoutManager(new LinearLayoutManager(context));
+            progressiveTasksRecyclerView.setVisibility(View.VISIBLE);
+
+        }
     }
 
-    private void initObservers() {
-        allTasksObserver = new Observer<List<Task>>() {
-            @Override
-            public void onChanged(List<Task> tasks) {
-                // Update the cached copy of the words in the adapter.
-                for (int i = 0; i < tasks.size(); i++) {
-                    Log.d(TAG, "New task found allObservers: " + tasks.get(i).getTitle());
-                    if (colorArcProgressBar != null && tasks.get(i).get_id() == selectedTask) {
-                        updateDialogUi(tasks.get(i));
-                    }
-                    if (currentObserver.equals(allTasksObserver)) {
-                        adapter.setDataSet(tasks);
-                        adapter.notifyDataSetChanged();
-                    }
-                }
-            }
-        };
-        completedTasksObserver = new Observer<List<Task>>() {
-            @Override
-            public void onChanged(List<Task> tasks) {
-                // Update the cached copy of the words in the adapter.
-                for (int i = 0; i < tasks.size(); i++) {
-                    Log.d(TAG, "New task found completedObservers: " + tasks.get(i).getTitle());
-                    if (colorArcProgressBar != null && tasks.get(i).get_id() == selectedTask) {
-                        updateDialogUi(tasks.get(i));
-                    }
-                    if (currentObserver.equals(completedTasksObserver)) {
-                        adapter.setDataSet(tasks);
-                        adapter.notifyDataSetChanged();
-                    }
-                }
-            }
-        };
-        incompleteTasksObserver = tasks -> {
-            // Update the cached copy of the words in the adapter.
-            for (int i = 0; i < tasks.size(); i++) {
-                Log.d(TAG, "New task found unCompletedObservers: " + tasks.get(i).getTitle());
-                if (colorArcProgressBar != null && tasks.get(i).get_id() == selectedTask) {
-                    updateDialogUi(tasks.get(i));
-                }
-                if (currentObserver.equals(incompleteTasksObserver)) {
-                    adapter.setDataSet(tasks);
-                    adapter.notifyDataSetChanged();
-                }
-            }
-        };
+    public static void updateMilestonesState(Task task) {
+        mTaskViewModel.updateTask(task);
     }
 
     private void initRecyclerView() {
@@ -324,5 +297,53 @@ public class MainActivity extends AppCompatActivity {
             fab.setEnabled(false); // avoid multiple clicks
             startActivity(new Intent(this, StepActivity.class));
         });
+    }
+
+    private void initObservers() {
+        allTasksObserver = new Observer<List<Task>>() {
+            @Override
+            public void onChanged(List<Task> tasks) {
+                // Update the cached copy of the words in the adapter.
+                for (int i = 0; i < tasks.size(); i++) {
+                    Log.d(TAG, "New task found allObservers: " + tasks.get(i).getTitle());
+                    if (colorArcProgressBar != null && tasks.get(i).get_id() == selectedTask) {
+                        updateDialogUi(tasks.get(i), MainActivity.this);
+                    }
+                    if (currentObserver.equals(allTasksObserver)) {
+                        adapter.setDataSet(tasks);
+                        adapter.notifyDataSetChanged();
+                    }
+                }
+            }
+        };
+        completedTasksObserver = new Observer<List<Task>>() {
+            @Override
+            public void onChanged(List<Task> tasks) {
+                // Update the cached copy of the words in the adapter.
+                for (int i = 0; i < tasks.size(); i++) {
+                    Log.d(TAG, "New task found completedObservers: " + tasks.get(i).getTitle());
+                    if (colorArcProgressBar != null && tasks.get(i).get_id() == selectedTask) {
+                        updateDialogUi(tasks.get(i), MainActivity.this);
+                    }
+                    if (currentObserver.equals(completedTasksObserver)) {
+                        adapter.setDataSet(tasks);
+                        adapter.notifyDataSetChanged();
+                    }
+                }
+            }
+        };
+        incompleteTasksObserver = tasks -> {
+            // Update the cached copy of the words in the adapter.
+            for (int i = 0; i < tasks.size(); i++) {
+                Log.d(TAG, "New task found unCompletedObservers: " + tasks.get(i).getTitle());
+                if (colorArcProgressBar != null && tasks.get(i).get_id() == selectedTask) {
+                    updateDialogUi(tasks.get(i), MainActivity.this);
+                }
+                if (currentObserver.equals(incompleteTasksObserver)) {
+                    adapter.setDataSet(tasks);
+                    adapter.notifyDataSetChanged();
+                }
+            }
+        };
     }
 }
