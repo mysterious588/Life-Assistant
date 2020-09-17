@@ -58,7 +58,7 @@ public class EditTextStep extends Step<String> {
         // three characters. In case it is not, we will display an error message for feedback.
         // In an optional step, you should implement this method to always return a valid value.
         boolean isNameValid = stepData.length() >= 1;
-        String errorMessage = !isNameValid ? "can't be empty" : "";
+        String errorMessage = !isNameValid ? "Can't be empty" : "";
 
         return new IsDataValid(isNameValid, errorMessage);
     }

@@ -17,6 +17,7 @@ import android.widget.TextView;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -56,6 +57,8 @@ public class MainActivity extends AppCompatActivity {
 
     private static Observer<List<Task>> allTasksObserver, incompleteTasksObserver, completedTasksObserver;
     private static Observer<List<Task>> currentObserver;
+
+    private LiveData<List<Task>> returnTasks;
 
     public static void viewTaskDialog(Context context, Task task, View v) {
 
@@ -271,26 +274,29 @@ public class MainActivity extends AppCompatActivity {
             public void onItemSelected(int i) {
                 switch (i) {
                     case R.id.allTasksMenuItem:
-                        Log.d(TAG, "home navigation chosen");
+                        Log.d(TAG, "All navigation chosen");
                         removeAllObservers(allTasksObserver);
-                        mTaskViewModel.getAllTasks().observe(MainActivity.this, allTasksObserver);
-                        if (mTaskViewModel.getAllTasks().getValue().size() == 0) {
+                        returnTasks = mTaskViewModel.getAllTasks();
+                        returnTasks.observe(MainActivity.this, allTasksObserver);
+                        if (returnTasks.getValue().size() == 0) {
                             adapter.setDataSet(null);
                         }
                         break;
                     case R.id.completeTasksMenuItem:
-                        Log.d(TAG, "activity navigation chosen");
+                        Log.d(TAG, "Complete navigation chosen");
                         removeAllObservers(completedTasksObserver);
-                        mTaskViewModel.getCompletedTasks().observe(MainActivity.this, completedTasksObserver);
-                        if (mTaskViewModel.getCompletedTasks().getValue() == null || mTaskViewModel.getCompletedTasks().getValue().size() == 0) {
+                        returnTasks = mTaskViewModel.getCompletedTasks();
+                        returnTasks.observe(MainActivity.this, completedTasksObserver);
+                        if (returnTasks.getValue() == null || returnTasks.getValue().size() == 0) {
                             adapter.setDataSet(null);
                         }
                         break;
                     case R.id.incompleteTasksMenuItem:
-                        Log.d(TAG, "favorites navigation chosen");
+                        Log.d(TAG, "Incomplete navigation chosen");
                         removeAllObservers(incompleteTasksObserver);
-                        mTaskViewModel.getUnCompletedTasks().observe(MainActivity.this, incompleteTasksObserver);
-                        if (mTaskViewModel.getUnCompletedTasks().getValue() == null || mTaskViewModel.getCompletedTasks().getValue().size() == 0) {
+                        returnTasks = mTaskViewModel.getUnCompletedTasks();
+                        returnTasks.observe(MainActivity.this, incompleteTasksObserver);
+                        if (returnTasks.getValue() == null || returnTasks.getValue().size() == 0) {
                             adapter.setDataSet(null);
                         }
                         break;
