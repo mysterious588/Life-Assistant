@@ -61,9 +61,10 @@ public class StepActivity extends Activity implements StepperFormListener {
         int type = typeString.equals("Timed") ? Task.TIMED : Task.PROGRESSIVE;
         Log.d(TAG, "duration " + TypeStep.getDuration());
         Task task = new Task(titleEditText.getStepData(), type, 0, TypeStep.getDuration(), LocalDateTime.now());
-        if (TypeStep.getMilestones() != null) {
+        if (task.getType() == Task.PROGRESSIVE && TypeStep.getMilestones() != null) {
             task.setSubTasks(TypeStep.getMilestones());
             ArrayList<Boolean> states = new ArrayList<>();
+            // fill states with falses
             for (int i = 0; i < TypeStep.getMilestones().size(); i++)
                 states.add(false);
             task.setSubTasksState(states);
