@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?><!-- bottom_menu.xml -->
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/archivedTasksMenuItem"
+        android:icon="@drawable/baseline_archive_white_48dp"
+        android:title="Archived Tasks"
+        app:cnb_iconColor="@color/colorPrimary" />
+    <item
+        android:id="@+id/timelineMenuItem"
+        android:icon="@drawable/baseline_timeline_white_48dp"
+        android:title="Timeline"
+        app:cnb_iconColor="@color/colorPrimary" />
+</menu>
