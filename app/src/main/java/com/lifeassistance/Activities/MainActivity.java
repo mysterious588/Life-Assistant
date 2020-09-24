@@ -20,6 +20,7 @@ import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
@@ -42,9 +43,10 @@ import com.shinelw.library.ColorArcProgressBar;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private static int selectedTask = -1;
 
@@ -230,6 +232,7 @@ public class MainActivity extends AppCompatActivity {
     private void initNavigationDrawer() {
         DrawerLayout mDrawerLayout = findViewById(R.id.drawerLayout);
         NavigationView navigationView = findViewById(R.id.navigationDrawer);
+        navigationView.setNavigationItemSelectedListener(this);
 
         mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, null, R.string.navigation_drawer_open, R.string.navigation_drawer_close) {
 
@@ -264,6 +267,20 @@ public class MainActivity extends AppCompatActivity {
 //        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
 //        NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
 //        NavigationUI.setupWithNavController(navigationView, navController);
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        // Handle navigation view Item clicks here.
+        int id = item.getItemId();
+
+        if (id == R.id.archivedTasksMenuItem) {
+            startActivity(new Intent(this, ArchivedTasksActivity.class));
+            return true;
+        }
+        DrawerLayout drawer = findViewById(R.id.drawerLayout);
+        drawer.closeDrawer(GravityCompat.START);
+        return true;
     }
 
     private static void updateDialogUi(Task task, Context context) {
@@ -377,8 +394,7 @@ public class MainActivity extends AppCompatActivity {
                         updateDialogUi(tasks.get(i), MainActivity.this);
                     }
                     if (currentObserver.equals(allTasksObserver)) {
-                        adapter.setDataSet(tasks);
-                        adapter.notifyDataSetChanged();
+                        refreshAdapter(tasks);
                     }
                 }
             }
@@ -393,8 +409,7 @@ public class MainActivity extends AppCompatActivity {
                         updateDialogUi(tasks.get(i), MainActivity.this);
                     }
                     if (currentObserver.equals(completedTasksObserver)) {
-                        adapter.setDataSet(tasks);
-                        adapter.notifyDataSetChanged();
+                        refreshAdapter(tasks);
                     }
                 }
             }
@@ -407,11 +422,27 @@ public class MainActivity extends AppCompatActivity {
                     updateDialogUi(tasks.get(i), MainActivity.this);
                 }
                 if (currentObserver.equals(incompleteTasksObserver)) {
-                    adapter.setDataSet(tasks);
-                    adapter.notifyDataSetChanged();
+                    refreshAdapter(tasks);
                 }
             }
         };
+    }
+
+    private void refreshAdapter(List<Task> tasks) {
+        List<Task> tasksUpdated = new ArrayList<>();
+        TextView emptyTextView = findViewById(R.id.emptyTextView);
+        boolean showTextView = true;
+        for (int i = 0; i < tasks.size(); i++) {
+            Task task = tasks.get(i);
+            if (!(task.get_id() == 1 || task.get_id() == 2)) {
+                tasksUpdated.add(task);
+                showTextView = false;
+            }
+        }
+        if (showTextView) emptyTextView.setVisibility(View.VISIBLE);
+        else emptyTextView.setVisibility(View.GONE);
+        adapter.setDataSet(tasksUpdated);
+        adapter.notifyDataSetChanged();
     }
 
     @Override

@@ -43,7 +43,13 @@ public abstract class TaskDatabase extends RoomDatabase {
                 // Populate the database in the background.
                 // If you want to start with more words, just add them.
                 TaskDao dao = INSTANCE.mTaskDao();
+                Task nullCompletedTask = new Task(null, 0, 0, 0, null);
+                nullCompletedTask.setCompleted(true);
+                Task nullNonCompletedTask = new Task(null, 0, 0, 0, null);
+                nullNonCompletedTask.setCompleted(false);
                 Task word = new Task("This is an example", Task.TIMED, 60, 90, LocalDateTime.now());
+                dao.insert(nullCompletedTask);
+                dao.insert(nullNonCompletedTask);
                 dao.insert(word);
             });
         }
