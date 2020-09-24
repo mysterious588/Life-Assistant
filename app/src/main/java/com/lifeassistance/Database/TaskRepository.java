@@ -55,6 +55,10 @@ public class TaskRepository {
         return mTaskDao.getUnCompletedTasks();
     }
 
+    public LiveData<List<Task>> getArchivedTasks() {
+        return mTaskDao.getArchivedTasks();
+    }
+
     public void updateTask(Task task) {
         TaskDatabase.databaseWriteExecutor.execute(() -> {
             mTaskDao.updateTask(task);

@@ -41,6 +41,9 @@ public interface TaskDao {
     @Query("SELECT * FROM tasks_table WHERE isCompleted = 0 ORDER BY dateAdded")
     LiveData<List<Task>> getUnCompletedTasks();
 
+    @Query("SELECT * FROM tasks_table WHERE archived = 1")
+    LiveData<List<Task>> getArchivedTasks();
+
     @Update
     void updateTask(Task task);
 

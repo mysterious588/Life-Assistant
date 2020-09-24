@@ -50,6 +50,10 @@ public class TaskViewModel extends AndroidViewModel {
         return mRepository.getUnCompletedTasks();
     }
 
+    public LiveData<List<Task>> getArchivedTasks() {
+        return mRepository.getArchivedTasks();
+    }
+
     public void updateTask(Task task) {
         mRepository.updateTask(task);
     }
