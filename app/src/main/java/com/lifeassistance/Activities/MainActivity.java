@@ -348,27 +348,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         removeAllObservers(allTasksObserver);
                         returnTasks = mTaskViewModel.getAllTasks();
                         returnTasks.observe(MainActivity.this, allTasksObserver);
-                        if (returnTasks.getValue().size() == 0) {
-                            adapter.setDataSet(null);
-                        }
                         break;
                     case R.id.completeTasksMenuItem:
                         Log.d(TAG, "Complete navigation chosen");
                         removeAllObservers(completedTasksObserver);
                         returnTasks = mTaskViewModel.getCompletedTasks();
                         returnTasks.observe(MainActivity.this, completedTasksObserver);
-                        if (returnTasks.getValue() == null || returnTasks.getValue().size() == 0) {
-                            adapter.setDataSet(null);
-                        }
                         break;
                     case R.id.incompleteTasksMenuItem:
                         Log.d(TAG, "Incomplete navigation chosen");
                         removeAllObservers(incompleteTasksObserver);
                         returnTasks = mTaskViewModel.getUnCompletedTasks();
                         returnTasks.observe(MainActivity.this, incompleteTasksObserver);
-                        if (returnTasks.getValue() == null || returnTasks.getValue().size() == 0) {
-                            adapter.setDataSet(null);
-                        }
                         break;
                 }
             }

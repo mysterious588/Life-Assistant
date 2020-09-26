@@ -1,9 +1,12 @@
 package com.lifeassistance.Steps;
 
+import android.content.res.ColorStateList;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+
+import com.khaledz.lifeassistance.R;
 
 import java.util.ArrayList;
 
@@ -49,13 +52,24 @@ public class TypeStep extends Step<String> {
 
     @Override
     protected View createStepContentLayout() {
-        // Here we generate the view that will be used by the library as the content of the step.
-        // In this case we do it programmatically, but we could also do it by inflating an XML layout.
-        mRadioGroup = new RadioGroup(getContext());
+
+        ColorStateList colorStateList = new ColorStateList(new int[][]{new int[]{-android.R.attr.state_enabled} //disabled
+                , new int[]{android.R.attr.state_enabled} //enabled
+        }, new int[]{getContext().getResources().getColor(R.color.colorAccent, null) //disabled
+                , getContext().getResources().getColor(R.color.colorAccent, null)    //enabled
+        });
+
         timedRadioButton = new RadioButton(getContext());
         timedRadioButton.setText("Timed");
+        timedRadioButton.setTextColor(getContext().getResources().getColor(R.color.colorText, null));
+        timedRadioButton.setButtonTintList(colorStateList);
+
         progressiveRadioButton = new RadioButton(getContext());
         progressiveRadioButton.setText("Progressive");
+        progressiveRadioButton.setTextColor(getContext().getResources().getColor(R.color.colorText, null));
+        progressiveRadioButton.setButtonTintList(colorStateList);
+
+        mRadioGroup = new RadioGroup(getContext());
         mRadioGroup.addView(timedRadioButton);
         mRadioGroup.addView(progressiveRadioButton);
         mRadioGroup.setOrientation(LinearLayout.HORIZONTAL);
@@ -110,7 +124,7 @@ public class TypeStep extends Step<String> {
 
         } else if (getStepData().equals("Progressive") && chosenState != PROGRESSIVE) {
             // progressive is picked
-            progressiveListStep = new ProgressiveListStep("Milestones", "MS");
+            progressiveListStep = new ProgressiveListStep("Milestones", "Milestone");
             if (chosenState == TIMED) verticalStepperFormView.removeStep(2);
             chosenState = PROGRESSIVE;
             verticalStepperFormView.addStep(2, progressiveListStep);

@@ -3,6 +3,8 @@ package com.lifeassistance.Steps;
 import android.view.View;
 import android.widget.NumberPicker;
 
+import com.khaledz.lifeassistance.R;
+
 import ernestoyaquello.com.verticalstepperform.Step;
 
 public class TimePIckStep extends Step<Integer> {
@@ -20,6 +22,7 @@ public class TimePIckStep extends Step<Integer> {
         if (timePicker == null) timePicker = new NumberPicker(getContext());
         timePicker.setMinValue(0);
         timePicker.setMaxValue(24 * 60);
+        timePicker.setBackgroundColor(getContext().getResources().getColor(R.color.colorAccent));
 
         timePicker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
             @Override

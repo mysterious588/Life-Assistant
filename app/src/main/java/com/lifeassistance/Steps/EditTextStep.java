@@ -8,6 +8,8 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
+import com.khaledz.lifeassistance.R;
+
 import ernestoyaquello.com.verticalstepperform.Step;
 
 public class EditTextStep extends Step<String> {
@@ -27,6 +29,8 @@ public class EditTextStep extends Step<String> {
         userNameView = new EditText(getContext());
         userNameView.setSingleLine(true);
         userNameView.setHint(hint);
+        userNameView.setTextColor(getContext().getResources().getColor(R.color.colorHintText, null));
+        userNameView.setHintTextColor(getContext().getResources().getColor(R.color.colorHintText, null));
 
         userNameView.addTextChangedListener(new TextWatcher() {
 

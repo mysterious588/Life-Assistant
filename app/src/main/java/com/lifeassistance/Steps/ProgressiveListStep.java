@@ -8,6 +8,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 
+import com.khaledz.lifeassistance.R;
+
 import java.util.ArrayList;
 
 import ernestoyaquello.com.verticalstepperform.Step;
@@ -35,15 +37,20 @@ public class ProgressiveListStep extends Step<ArrayList<String>> {
         taskEditTexts.add(taskEditText);
         taskEditText.setSingleLine(true);
         taskEditText.setHint(hint);
+        taskEditText.setTextColor(getContext().getResources().getColor(R.color.colorText, null));
+        taskEditText.setHintTextColor(getContext().getResources().getColor(R.color.colorHintText, null));
 
         addButton = new Button(getContext());
         addButton.setText("Add");
+        addButton.setBackgroundColor(getContext().getResources().getColor(R.color.colorAccent, null));
+        addButton.setTextColor(getContext().getResources().getColor(R.color.colorText, null));
 
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 markAsCompletedOrUncompleted(true);
                 EditText editText = new EditText(getContext());
+                editText.setTextColor(getContext().getResources().getColor(R.color.colorText, null));
                 taskEditTexts.add(editText);
                 editText.setSingleLine(true);
                 Button removeButton = new Button(getContext());

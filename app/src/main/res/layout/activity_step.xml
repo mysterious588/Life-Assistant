@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorBackground"
     android:orientation="vertical"
     tools:context="com.lifeassistance.Activities.StepActivity">
 
@@ -12,8 +13,8 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_margin="28dp"
-        android:text="Add A NEW GOAL"
-        android:textColor="@color/colorPrimary"
+        android:text="@string/add_a_new_goal"
+        android:textColor="@color/colorAccent"
         android:textSize="35sp"
         android:textStyle="bold" />
     <!-- new_user_form_activity.xml -->
@@ -21,7 +22,12 @@
         android:id="@+id/stepper_forms"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:form_circle_background_color="@color/colorPrimary"
-        app:form_next_button_background_color="@color/colorPrimary"
-        app:form_next_button_pressed_background_color="@color/colorPrimaryDark" />
+        app:form_bottom_navigation_background_color="@color/colorAccent"
+        app:form_circle_background_color="@color/colorAccent"
+        app:form_circle_text_color="@color/colorPrimary"
+        app:form_next_button_background_color="@color/colorAccent"
+        app:form_next_button_pressed_background_color="@color/colorPrimaryDark"
+        app:form_next_button_pressed_text_color="@color/colorAccent"
+        app:form_next_button_text_color="@color/colorText"
+        app:form_title_text_color="@color/colorText" />
 </LinearLayout>

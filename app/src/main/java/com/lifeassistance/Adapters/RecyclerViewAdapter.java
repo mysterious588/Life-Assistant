@@ -54,6 +54,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             progressTextView.setText(String.format("%d/%d tasks", (int) task.getProgress(), task.getDuration()));
         progressView.setMax(task.getDuration());
         progressView.setProgress(task.getProgress());
+        progressView.setLabelText(String.format("%-2.2f", ((task.getProgress()) / (float) task.getDuration()) * 100) + "%");
+        progressView.setLabelSize(12);
 
         if (task.getType() == Task.TIMED) typeTextView.setText(R.string.Timed);
         else typeTextView.setText(R.string.Progressive);
