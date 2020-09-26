@@ -23,10 +23,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:paddingLeft="16dp"
-        android:paddingTop="16dp"
-        android:paddingRight="16dp"
-
+        android:paddingTop="8dp"
         android:scrollbars="vertical" />
 
     <LinearLayout
@@ -41,8 +38,6 @@
             android:layout_gravity="bottom"
             android:layout_margin="@dimen/fab_margin"
             android:background="@color/colorBackground"
-            app:cnb_badgeColor="@color/colorAccent"
-            app:cnb_unselectedColor="@color/colorText"
             app:cnb_menuResource="@menu/menu_navigation" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton

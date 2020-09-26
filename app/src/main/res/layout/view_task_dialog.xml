@@ -67,8 +67,8 @@
         android:clickable="true"
         android:foreground="?android:selectableItemBackground"
         android:visibility="gone"
-        app:pause_bg="@color/colorPrimary"
-        app:play_bg="@color/colorPrimary" />
+        app:pause_bg="@color/colorAccent"
+        app:play_bg="@color/colorPrimaryDark" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/tasksDialogRecyclerView"
