@@ -100,7 +100,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                     int pos = getAdapterPosition();
                     if (pos != RecyclerView.NO_POSITION) {
                         Task task = dataSet.get(pos);
-                        MainActivity.deleteTask(view.getContext(), task, pos);
+                        MainActivity.viewTaskDetails(view.getContext(), task, pos);
                     }
                     return true;
                 }

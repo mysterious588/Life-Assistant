@@ -7,12 +7,14 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -123,25 +125,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
-    public static void deleteTask(Context context, Task task, int position) {
+    public static void viewTaskDetails(Context context, Task task, int position) {
 
+        Dialog dialog = new Dialog(context);
         DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
             @Override
-            public void onClick(DialogInterface dialog, int which) {
+            public void onClick(DialogInterface d, int which) {
                 switch (which) {
                     case DialogInterface.BUTTON_POSITIVE:
                         //Yes button clicked
-                        if (mTaskViewModel.getAllTasks().getValue().size() == 1) {
-                            Log.d(TAG, "list empty");
-                            mTaskViewModel.deleteTask(task);
-                            adapter.setDataSet(null);
-                            adapter.notifyItemRemoved(position);
-
-                        } else {
-                            mTaskViewModel.deleteTask(task);
-                            Log.d(TAG, "list not empty, size: " + mTaskViewModel.getAllTasks().getValue().size());
-                            adapter.notifyItemRemoved(position);
-                        }
+                        mTaskViewModel.deleteTask(task);
+                        adapter.notifyItemRemoved(position);
+                        dialog.dismiss();
                         break;
 
                     case DialogInterface.BUTTON_NEGATIVE:
@@ -151,11 +146,54 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         };
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setMessage("Are you sure you want to remove this?").
-                setPositiveButton("Yes", dialogClickListener).
-                setNegativeButton("No", dialogClickListener).
-                show();
+        dialog.setContentView(R.layout.view_task_details_dialog);
+
+        WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+        lp.copyFrom(dialog.getWindow().getAttributes());
+        lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+        lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
+
+
+        TextView titleTextView = dialog.findViewById(R.id.titleTextViewDialogDetails);
+        TextView dateAddedTextView = dialog.findViewById(R.id.dateAddedTextViewDialogDetails);
+        TextView deadlineTextView = dialog.findViewById(R.id.dateDeadlineDialogDetails);
+        TextView progressTextView = dialog.findViewById(R.id.progressTextViewDialogDetails);
+        TextView durationTextView = dialog.findViewById(R.id.durationTextViewDialogDetails);
+        TextView subTasksTextView = dialog.findViewById(R.id.subTasksTextViewDialogDetails);
+
+        titleTextView.setText(task.getTitle());
+        titleTextView.setMovementMethod(new ScrollingMovementMethod());
+        dateAddedTextView.setText(task.getDateAdded().format(DateTimeFormatter.ofPattern("hh:mm:ss a")));
+        progressTextView.setText(((int) task.getProgress()) * 100 / task.getDuration() + "%");
+        if (task.getType() == Task.TIMED) durationTextView.setText(task.getDuration() + " Minutes");
+        else durationTextView.setText(task.getDuration() + " Tasks");
+
+        if (task.getSubTasks() != null) {
+            ArrayList<String> subTasks = task.getSubTasks();
+            Log.d(TAG, "detecting BULLSHIT");
+            for (int i = 0; i < subTasks.size(); i++) {
+                if (subTasksTextView.getText().toString().isEmpty())
+                    subTasksTextView.setText("\n" + subTasksTextView.getText() + subTasks.get(i));
+                else subTasksTextView.setText(subTasks.get(i));
+            }
+        }
+        dialog.show();
+        dialog.getWindow().setAttributes(lp);
+        dialog.setCancelable(true);
+
+        Button deleteButton = dialog.findViewById(R.id.deleteButtonDialogDetails);
+        deleteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                builder.setMessage("Are you sure you want to remove this?").
+                        setPositiveButton("Yes", dialogClickListener).
+                        setNegativeButton("No", dialogClickListener).
+                        show();
+            }
+        });
+
+
     }
 
     private static void removeAllObservers(Observer keep) {
