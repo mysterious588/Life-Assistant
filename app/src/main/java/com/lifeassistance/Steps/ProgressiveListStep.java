@@ -1,14 +1,23 @@
 package com.lifeassistance.Steps;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Context;
+import android.graphics.Color;
+import android.os.AsyncTask;
+import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
+import com.google.android.material.button.MaterialButton;
+import com.google.api.services.youtube.model.PlaylistItemListResponse;
 import com.khaledz.lifeassistance.R;
+import com.lifeassistance.Apis.YouTubeAPI;
+import com.lifeassistance.Utils.RegexProvider;
 
 import java.util.ArrayList;
 
@@ -16,9 +25,10 @@ import ernestoyaquello.com.verticalstepperform.Step;
 
 public class ProgressiveListStep extends Step<ArrayList<String>> {
 
-    private ArrayList<EditText> taskEditTexts;
-    private Button addButton;
-    private String hint;
+    private static final String TAG = "Progressive List Step";
+    private final ArrayList<EditText> taskEditTexts;
+    private final String hint;
+    private MaterialButton addButton, importFromYouTubeButton;
 
     public ProgressiveListStep(String stepTitle, String hint) {
         super(stepTitle);
@@ -26,54 +36,130 @@ public class ProgressiveListStep extends Step<ArrayList<String>> {
         taskEditTexts = new ArrayList<>();
     }
 
+    @SuppressLint("ResourceType")
     @Override
     protected View createStepContentLayout() {
         // Here we generate the view that will be used by the library as the content of the step.
         // In this case we do it programmatically, but we could also do it by inflating an XML layout.
-        LinearLayout linearLayout = new LinearLayout(getContext());
+
+        Context context = getContext();
+
+        LinearLayout linearLayout = new LinearLayout(context);
         linearLayout.setOrientation(LinearLayout.VERTICAL);
 
-        EditText taskEditText = new EditText(getContext());
+        EditText taskEditText = new EditText(context);
         taskEditTexts.add(taskEditText);
         taskEditText.setSingleLine(true);
         taskEditText.setHint(hint);
-        taskEditText.setTextColor(getContext().getResources().getColor(R.color.colorText, null));
-        taskEditText.setHintTextColor(getContext().getResources().getColor(R.color.colorHintText, null));
+        taskEditText.setTextColor(context.getResources().getColor(R.color.colorText, null));
+        taskEditText.setHintTextColor(context.getResources().getColor(R.color.colorHintText, null));
 
-        addButton = new Button(getContext());
+        importFromYouTubeButton = new MaterialButton(context);
+        importFromYouTubeButton.setText("Import From YouTube");
+        importFromYouTubeButton.setBackgroundColor(Color.RED);
+        importFromYouTubeButton.setTextColor(Color.WHITE);
+
+        importFromYouTubeButton.setOnClickListener(view -> {
+            Dialog importDialog = new Dialog(context);
+
+            LinearLayout dialogLinearLayout = new LinearLayout(context);
+            dialogLinearLayout.setOrientation(LinearLayout.VERTICAL);
+            dialogLinearLayout.setBackgroundColor(Color.BLACK);
+            dialogLinearLayout.setPadding(16, 16, 16, 16);
+
+            EditText editText = new EditText(context);
+            editText.setHintTextColor(Color.DKGRAY);
+            editText.setTextColor(Color.WHITE);
+            editText.setHint("Link");
+            editText.setId(223);
+
+            MaterialButton button = new MaterialButton(context);
+            button.setText("Import");
+
+            dialogLinearLayout.addView(editText);
+            dialogLinearLayout.addView(button);
+
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
+            importDialog.addContentView(dialogLinearLayout, params);
+            importDialog.getWindow().setLayout(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+            button.setOnClickListener(view1 -> {
+                if (editText.getText().toString().isEmpty()) {
+                    showToast("Please type in the link");
+                } else if (!RegexProvider.isLinkValid(editText.getText().toString().trim())) {
+                    showToast("Link isn't valid");
+                } else {
+                    Integer[] ids = {editText.getId(), linearLayout.getId()};
+                    ParamsAsync paramsAsync = new ParamsAsync(importDialog, ids);
+                    new YouTubeListDownloader().execute(paramsAsync);
+                    importDialog.hide();
+                }
+            });
+
+            importDialog.show();
+        });
+
+        addButton = new MaterialButton(context);
         addButton.setText("Add");
-        addButton.setBackgroundColor(getContext().getResources().getColor(R.color.colorAccent, null));
-        addButton.setTextColor(getContext().getResources().getColor(R.color.colorText, null));
+        addButton.setBackgroundColor(context.getResources().getColor(R.color.colorAccent, null));
+        addButton.setTextColor(context.getResources().getColor(R.color.colorText, null));
 
-        addButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                markAsCompletedOrUncompleted(true);
-                EditText editText = new EditText(getContext());
-                editText.setTextColor(getContext().getResources().getColor(R.color.colorText, null));
-                taskEditTexts.add(editText);
-                editText.setSingleLine(true);
-                Button removeButton = new Button(getContext());
-                removeButton.setText("-");
+        linearLayout.setId(941);
 
-                LinearLayout rowLayout = new LinearLayout(getContext());
-                rowLayout.addView(editText, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 1));
-                rowLayout.addView(removeButton);
-                rowLayout.setOrientation(LinearLayout.HORIZONTAL);
-                linearLayout.addView(rowLayout, linearLayout.getChildCount() - 1);
-                removeButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        linearLayout.removeView(rowLayout);
-                    }
-                });
-                editText.requestFocus();
-            }
+        addButton.setOnClickListener(view -> {
+            addMileStone(linearLayout.getId(), "");
         });
         linearLayout.addView(taskEditText);
+        linearLayout.addView(importFromYouTubeButton);
         linearLayout.addView(addButton);
 
         return linearLayout;
+    }
+
+    private PlaylistItemListResponse importYouTube(int editTextId, Dialog dialog) {
+        EditText editText = dialog.findViewById(editTextId);
+
+        String link = editText.getText().toString().trim();
+
+        if (RegexProvider.isLinkValid(link)) {
+            try {
+                String playlistId = RegexProvider.extractYouTubePlaylistId(link);
+                if (playlistId == null) return null;
+                Log.d(TAG, "Playlist Id extracted: " + playlistId);
+                PlaylistItemListResponse response = YouTubeAPI.getData(playlistId, getContext());
+                return response;
+            } catch (Exception e) {
+                Log.d(TAG, "Retrieving list failed");
+                e.printStackTrace();
+            }
+
+        }
+        return null;
+    }
+
+    private void showToast(String message) {
+        Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
+    }
+
+    private void addMileStone(int linearLayoutId, String text) {
+        LinearLayout linearLayout = ((Activity) getContext()).findViewById(linearLayoutId);
+
+        Context context = getContext();
+        markAsCompletedOrUncompleted(true);
+        EditText editText = new EditText(context);
+        editText.setTextColor(getContext().getResources().getColor(R.color.colorText, null));
+        taskEditTexts.add(editText);
+        editText.setSingleLine(true);
+        editText.setText(text);
+        MaterialButton removeButton = new MaterialButton(context);
+        removeButton.setText("-");
+
+        LinearLayout rowLayout = new LinearLayout(getContext());
+        rowLayout.addView(editText, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 1));
+        rowLayout.addView(removeButton);
+        rowLayout.setOrientation(LinearLayout.HORIZONTAL);
+        linearLayout.addView(rowLayout, linearLayout.getChildCount() - 2);
+        removeButton.setOnClickListener(view1 -> linearLayout.removeView(rowLayout));
+        editText.requestFocus();
     }
 
     @Override
@@ -93,7 +179,7 @@ public class ProgressiveListStep extends Step<ArrayList<String>> {
         ArrayList<String> tasks = new ArrayList<>();
         for (int i = 0; i < taskEditTexts.size(); i++)
             if (!taskEditTexts.get(i).getText().toString().isEmpty())
-                tasks.add(taskEditTexts.get(i).getText().toString());
+                tasks.add(taskEditTexts.get(i).getText().toString().trim());
         return tasks;
     }
 
@@ -141,5 +227,48 @@ public class ProgressiveListStep extends Step<ArrayList<String>> {
     @Override
     public void restoreStepData(ArrayList<String> stepData) {
         // To restore the step after a configuration change, we restore the text of its EditText view.
+    }
+
+    private static class ParamsAsync {
+        Dialog dialog;
+        Integer[] ids;
+
+        public ParamsAsync(Dialog dialog, Integer[] ids) {
+            this.dialog = dialog;
+            this.ids = ids;
+        }
+
+        public Dialog getDialog() {
+            return dialog;
+        }
+
+        public Integer[] getIds() {
+            return ids;
+        }
+    }
+
+    private class YouTubeListDownloader extends AsyncTask<ParamsAsync, Void, PlaylistItemListResponse> {
+        Integer[] ids;
+
+        @Override
+        protected PlaylistItemListResponse doInBackground(ParamsAsync... params) {
+            this.ids = params[0].getIds();
+            return importYouTube(this.ids[0], params[0].getDialog());
+        }
+
+        @Override
+        protected void onPostExecute(PlaylistItemListResponse playlistItemListResponse) {
+            super.onPostExecute(playlistItemListResponse);
+            try {
+                Log.d(TAG, "Number of Videos Found: " + playlistItemListResponse.getItems().size());
+                for (int i = 0; i < playlistItemListResponse.getItems().size(); i++) {
+                    String title = playlistItemListResponse.getItems().get(i).getSnippet().getTitle();
+                    if (i == 0) taskEditTexts.get(0).setText(title);
+                    else addMileStone(ids[1], title);
+                }
+            } catch (Exception ignored) {
+                Log.d(TAG, "Zero Videos");
+            }
+        }
     }
 }

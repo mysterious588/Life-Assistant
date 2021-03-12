@@ -119,30 +119,40 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 }
             });
         }
-        if (task.isCompleted()) {
-//            TextView wellDoneTextView = dialog.findViewById(R.id.wellDoneTextView);
-//            wellDoneTextView.setVisibility(View.VISIBLE);
-        }
     }
+    /*
+
+     */
 
     public static void viewTaskDetails(Context context, Task task, int position) {
 
         Dialog dialog = new Dialog(context);
-        DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface d, int which) {
-                switch (which) {
-                    case DialogInterface.BUTTON_POSITIVE:
-                        //Yes button clicked
-                        mTaskViewModel.deleteTask(task);
-                        adapter.notifyItemRemoved(position);
-                        dialog.dismiss();
-                        break;
 
-                    case DialogInterface.BUTTON_NEGATIVE:
-                        //No button clicked
-                        break;
-                }
+        DialogInterface.OnClickListener deleteDialogClickListener = (d, which) -> {
+            switch (which) {
+                case DialogInterface.BUTTON_POSITIVE:
+                    //Yes button clicked
+                    mTaskViewModel.deleteTask(task);
+                    adapter.notifyItemRemoved(position);
+                    dialog.dismiss();
+                    break;
+
+                case DialogInterface.BUTTON_NEGATIVE:
+                    //No button clicked
+                    break;
+            }
+        };
+        DialogInterface.OnClickListener archiveDialogClickListener = (d, which) -> {
+            switch (which) {
+                case DialogInterface.BUTTON_POSITIVE:
+                    //Yes button clicked
+                    task.setArchived(true);
+                    dialog.dismiss();
+                    break;
+
+                case DialogInterface.BUTTON_NEGATIVE:
+                    //No button clicked
+                    break;
             }
         };
 
@@ -159,7 +169,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         TextView deadlineTextView = dialog.findViewById(R.id.dateDeadlineDialogDetails);
         TextView progressTextView = dialog.findViewById(R.id.progressTextViewDialogDetails);
         TextView durationTextView = dialog.findViewById(R.id.durationTextViewDialogDetails);
-        TextView subTasksTextView = dialog.findViewById(R.id.subTasksTextViewDialogDetails);
 
         titleTextView.setText(task.getTitle());
         titleTextView.setMovementMethod(new ScrollingMovementMethod());
@@ -168,29 +177,27 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (task.getType() == Task.TIMED) durationTextView.setText(task.getDuration() + " Minutes");
         else durationTextView.setText(task.getDuration() + " Tasks");
 
-        if (task.getSubTasks() != null) {
-            ArrayList<String> subTasks = task.getSubTasks();
-            Log.d(TAG, "detecting BULLSHIT");
-            for (int i = 0; i < subTasks.size(); i++) {
-                if (subTasksTextView.getText().toString().isEmpty())
-                    subTasksTextView.setText("\n" + subTasksTextView.getText() + subTasks.get(i));
-                else subTasksTextView.setText(subTasks.get(i));
-            }
-        }
+
         dialog.show();
         dialog.getWindow().setAttributes(lp);
         dialog.setCancelable(true);
 
         Button deleteButton = dialog.findViewById(R.id.deleteButtonDialogDetails);
-        deleteButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                builder.setMessage("Are you sure you want to remove this?").
-                        setPositiveButton("Yes", dialogClickListener).
-                        setNegativeButton("No", dialogClickListener).
-                        show();
-            }
+        deleteButton.setOnClickListener(view -> {
+            AlertDialog.Builder builder = new AlertDialog.Builder(context);
+            builder.setMessage("Are you sure you want to remove this?").
+                    setPositiveButton("Yes", deleteDialogClickListener).
+                    setNegativeButton("No", deleteDialogClickListener).
+                    show();
+        });
+
+        Button archiveButton = dialog.findViewById(R.id.archiveButtonDialogDetails);
+        archiveButton.setOnClickListener(view -> {
+            AlertDialog.Builder builder = new AlertDialog.Builder(context);
+            builder.setMessage("Are you sure you want to archive this?").
+                    setPositiveButton("Yes", archiveDialogClickListener).
+                    setNegativeButton("No", archiveDialogClickListener).
+                    show();
         });
 
 

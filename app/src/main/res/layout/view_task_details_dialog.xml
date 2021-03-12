@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/colorBackground"
@@ -179,33 +180,6 @@
             android:textSize="18sp"
             android:textStyle="bold" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_row="7"
-            android:layout_column="0"
-            android:layout_gravity="center"
-            android:layout_margin="8dp"
-            android:fontFamily="casual"
-            android:text="Subtask"
-            android:textColor="@color/colorPrimary"
-            android:textSize="18sp"
-            android:textStyle="bold" />
-
-        <TextView
-            android:id="@+id/subTasksTextViewDialogDetails"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_row="7"
-            android:layout_column="1"
-            android:layout_gravity="fill_horizontal"
-            android:layout_margin="8dp"
-            android:fontFamily="casual"
-            android:text="take the trash\nkill hitler"
-            android:textColor="@color/colorSecondaryText"
-            android:textSize="18sp"
-            android:textStyle="bold" />
-
     </GridLayout>
 
     <com.google.android.material.button.MaterialButton
@@ -214,6 +188,16 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:text="Delete"
-        android:textColor="@color/colorAccent" />
+        android:textColor="@color/colorText"
+        app:backgroundTint="#661B15" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/archiveButtonDialogDetails"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="Archive"
+        android:textColor="@color/colorText"
+        app:backgroundTint="@color/colorAccent" />
 
 </LinearLayout>
