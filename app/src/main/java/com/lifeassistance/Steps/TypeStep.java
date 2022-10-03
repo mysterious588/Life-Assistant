@@ -24,7 +24,7 @@ public class TypeStep extends Step<String> {
     private RadioButton timedRadioButton, progressiveRadioButton;
     private static int duration;
     private static ArrayList<String> milestones;
-    private VerticalStepperFormView verticalStepperFormView;
+    private final VerticalStepperFormView verticalStepperFormView;
     private TimePIckStep timePIckStep;
     private ProgressiveListStep progressiveListStep;
     private int chosenState = UNDEFINED;
@@ -74,12 +74,7 @@ public class TypeStep extends Step<String> {
         mRadioGroup.addView(progressiveRadioButton);
         mRadioGroup.setOrientation(LinearLayout.HORIZONTAL);
 
-        mRadioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup radioGroup, int i) {
-                markAsCompletedOrUncompleted(true);
-            }
-        });
+        mRadioGroup.setOnCheckedChangeListener((radioGroup, i) -> markAsCompletedOrUncompleted(true));
 
         return mRadioGroup;
     }

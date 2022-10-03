@@ -6,6 +6,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.AsyncTask;
+import android.text.InputType;
 import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -108,9 +109,70 @@ public class ProgressiveListStep extends Step<ArrayList<String>> {
         addButton.setOnClickListener(view -> {
             addMileStone(linearLayout.getId(), "");
         });
+
+        MaterialButton repeatedButtonAdd = new MaterialButton(context);
+        repeatedButtonAdd.setText("Add repeated task");
+        repeatedButtonAdd.setOnClickListener(view -> {
+            Dialog addRepeatedDialog = new Dialog(context);
+            LinearLayout dialogLinearLayout = new LinearLayout(context);
+            dialogLinearLayout.setOrientation(LinearLayout.VERTICAL);
+            dialogLinearLayout.setBackgroundColor(Color.BLACK);
+            dialogLinearLayout.setPadding(16, 16, 16, 16);
+
+            EditText editTextName = new EditText(context);
+            editTextName.setHintTextColor(Color.DKGRAY);
+            editTextName.setTextColor(Color.WHITE);
+            editTextName.setHint("Repeated task name");
+            editTextName.setId(223);
+
+            EditText editTextRepeat = new EditText(context);
+            editTextRepeat.setInputType(InputType.TYPE_CLASS_NUMBER);
+            editTextRepeat.setHintTextColor(Color.DKGRAY);
+            editTextRepeat.setTextColor(Color.WHITE);
+            editTextRepeat.setHint("Repeat times");
+            editTextRepeat.setId(224);
+
+
+            MaterialButton generateButton = new MaterialButton(context);
+            generateButton.setText("Generate");
+
+            dialogLinearLayout.addView(editTextName);
+            dialogLinearLayout.addView(editTextRepeat);
+            dialogLinearLayout.addView(generateButton);
+
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
+            addRepeatedDialog.addContentView(dialogLinearLayout, params);
+            addRepeatedDialog.getWindow().setLayout(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+            generateButton.setOnClickListener(view1 -> {
+                        if (editTextName.getText().toString().isEmpty()) {
+                            showToast("Please type in the link");
+                        } else if (editTextRepeat.getText().toString().isEmpty()) {
+                            showToast("Please specify the repetition number");
+                        } else {
+                            Integer[] ids = {editTextName.getId(), linearLayout.getId()};
+                            ParamsAsync paramsAsync = new ParamsAsync(addRepeatedDialog, ids);
+                            new YouTubeListDownloader().execute(paramsAsync);
+                            try {
+                                int n = Integer.parseInt(editTextRepeat.getText().toString().trim());
+                                for (int i = 1; i <= n; i++) {
+                                    addMileStone(linearLayout.getId(), editTextName.getText().toString() + " " + i);
+                                }
+                                addRepeatedDialog.hide();
+                            } catch (Exception e) {
+                                showToast("inavlid");
+                            }
+
+                        }
+                    }
+            );
+
+            addRepeatedDialog.show();
+        });
+
         linearLayout.addView(taskEditText);
-        linearLayout.addView(importFromYouTubeButton);
         linearLayout.addView(addButton);
+        linearLayout.addView(repeatedButtonAdd);
+        linearLayout.addView(importFromYouTubeButton);
 
         return linearLayout;
     }
@@ -157,7 +219,7 @@ public class ProgressiveListStep extends Step<ArrayList<String>> {
         rowLayout.addView(editText, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 1));
         rowLayout.addView(removeButton);
         rowLayout.setOrientation(LinearLayout.HORIZONTAL);
-        linearLayout.addView(rowLayout, linearLayout.getChildCount() - 2);
+        linearLayout.addView(rowLayout, linearLayout.getChildCount() - 3);
         removeButton.setOnClickListener(view1 -> linearLayout.removeView(rowLayout));
         editText.requestFocus();
     }

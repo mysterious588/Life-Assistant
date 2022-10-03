@@ -76,31 +76,27 @@ public class ProgressiveTasksAdapter extends RecyclerView.Adapter<ProgressiveTas
             this.milestoneCheckBox = itemView.findViewById(R.id.milestoneCheckBox);
             milestoneCheckBox.setEnabled(false);
 
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    int progress = 0;
-                    ArrayList<Boolean> states = mTask.getSubTasksState();
-                    if (milestoneCheckBox.isChecked()) {
-                        states.set(getAdapterPosition(), false);
-                        mTask.setSubTasksState(states);
-                        TaskViewModel taskViewModel = new TaskViewModel((Application) itemView.getContext().getApplicationContext());
-                        taskViewModel.updateTask(mTask);
-                        milestoneCheckBox.setChecked(false);
-                    } else {
-                        states.set(getAdapterPosition(), true);
-                        mTask.setSubTasksState(states);
-                        milestoneCheckBox.setChecked(true);
-                    }
-
-                    for (int i = 0; i < states.size(); i++)
-                        if (states.get(i)) progress++;
-                    mTask.setProgress(progress);
-                    if (progress == states.size()) mTask.setCompleted(true);
-                    else mTask.setCompleted(false);
+            itemView.setOnClickListener(view -> {
+                int progress = 0;
+                ArrayList<Boolean> states = mTask.getSubTasksState();
+                if (milestoneCheckBox.isChecked()) {
+                    states.set(getAdapterPosition(), false);
+                    mTask.setSubTasksState(states);
                     TaskViewModel taskViewModel = new TaskViewModel((Application) itemView.getContext().getApplicationContext());
                     taskViewModel.updateTask(mTask);
+                    milestoneCheckBox.setChecked(false);
+                } else {
+                    states.set(getAdapterPosition(), true);
+                    mTask.setSubTasksState(states);
+                    milestoneCheckBox.setChecked(true);
                 }
+
+                for (int i = 0; i < states.size(); i++)
+                    if (states.get(i)) progress++;
+                mTask.setProgress(progress);
+                mTask.setCompleted(progress == states.size());
+                TaskViewModel taskViewModel = new TaskViewModel((Application) itemView.getContext().getApplicationContext());
+                taskViewModel.updateTask(mTask);
             });
 
 //            milestoneCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {

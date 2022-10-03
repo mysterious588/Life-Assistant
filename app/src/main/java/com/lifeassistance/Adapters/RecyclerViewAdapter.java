@@ -84,26 +84,20 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             this.progressView = itemView.findViewById(R.id.progressView);
             this.progressTextView = itemView.findViewById(R.id.progressTextView);
 
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    int pos = getAdapterPosition();
-                    if (pos != RecyclerView.NO_POSITION) {
-                        Task task = dataSet.get(pos);
-                        MainActivity.viewTaskDialog(view.getContext(), task, view);
-                    }
+            itemView.setOnClickListener(view -> {
+                int pos = getAdapterPosition();
+                if (pos != RecyclerView.NO_POSITION) {
+                    Task task = dataSet.get(pos);
+                    MainActivity.viewTaskDialog(view.getContext(), task, view);
                 }
             });
-            itemView.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View view) {
-                    int pos = getAdapterPosition();
-                    if (pos != RecyclerView.NO_POSITION) {
-                        Task task = dataSet.get(pos);
-                        MainActivity.viewTaskDetails(view.getContext(), task, pos);
-                    }
-                    return true;
+            itemView.setOnLongClickListener(view -> {
+                int pos = getAdapterPosition();
+                if (pos != RecyclerView.NO_POSITION) {
+                    Task task = dataSet.get(pos);
+                    MainActivity.viewTaskDetails(view.getContext(), task, pos);
                 }
+                return true;
             });
 
         }

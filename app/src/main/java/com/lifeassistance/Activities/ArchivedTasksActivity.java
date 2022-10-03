@@ -4,16 +4,12 @@ import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.lifecycle.Observer;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.khaledz.lifeassistance.R;
 import com.lifeassistance.Adapters.RecyclerViewAdapter;
-import com.lifeassistance.Database.Task;
 import com.lifeassistance.ViewModels.TaskViewModel;
-
-import java.util.List;
 
 public class ArchivedTasksActivity extends AppCompatActivity {
 
@@ -30,12 +26,9 @@ public class ArchivedTasksActivity extends AppCompatActivity {
         initRecyclerView();
 
         mTaskViewModel = new TaskViewModel(getApplication());
-        mTaskViewModel.getArchivedTasks().observe(this, new Observer<List<Task>>() {
-            @Override
-            public void onChanged(List<Task> tasks) {
-                adapter.setDataSet(tasks);
-                adapter.notifyDataSetChanged();
-            }
+        mTaskViewModel.getArchivedTasks().observe(this, tasks -> {
+            adapter.setDataSet(tasks);
+            adapter.notifyDataSetChanged();
         });
 
     }
